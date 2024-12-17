@@ -1,0 +1,14 @@
+﻿{
+  "name": "com.dt.extension",
+  "version": "1.0.0",
+  "displayName": "Extension",
+  "description": "Extension",
+  "keywords": [
+    "extension"
+  ],
+  "author": {
+    "name": "Dt",
+    "email": "ttdat.dora@gmail.com"
+  },
+  "hideInEditor": true
+}
