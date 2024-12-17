@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7f183835dcf836841b8d3a5a0a8ddc35
+guid: 90474ea99d9830640ada2b262e48e66a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2128835057077610851
-    second: Tetromino_block2_4_0
+      213: -6429493399158520243
+    second: Blue_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Tetromino_block2_4_0
+      name: Blue_0
       rect:
         serializedVersion: 2
         x: 44
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 369628294342b8d10800000000000000
-      internalID: 2128835057077610851
+      spriteID: d46007181d9d5c6a0800000000000000
+      internalID: -6429493399158520243
       vertices: []
       indices: 
       edges: []
