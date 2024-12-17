@@ -1,0 +1,14 @@
+﻿{
+  "name": "com.dt.attribute",
+  "version": "1.0.0",
+  "displayName": "Custom Attribute",
+  "description": "Custom Attribute",
+  "keywords": [
+    "inspector"
+  ],
+  "author": {
+    "name": "Dt",
+    "email": "ttdat.dora@gmail.com"
+  },
+  "hideInEditor": true
+}

@@ -1,0 +1,18 @@
+{
+    "name": "Dt.Attribute.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:693b3d1061b181e43ba6ac19a04d3198"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
