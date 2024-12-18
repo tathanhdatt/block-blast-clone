@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8694271178538773904
 RectTransform:
   m_ObjectHideFlags: 0
@@ -280,6 +280,7 @@ MonoBehaviour:
   graphicContainer: {fileID: 11400000, guid: a1c54110e8fa58b41b375425ab7960bf, type: 2}
   activeGraphic: {fileID: 6507822209859703915}
   defaultGraphic: {fileID: 5204585242973984462}
+  isStatic: 0
 --- !u!61 &7794526936027621973
 BoxCollider2D:
   m_ObjectHideFlags: 0

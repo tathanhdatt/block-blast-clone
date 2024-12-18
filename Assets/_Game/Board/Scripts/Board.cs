@@ -11,7 +11,7 @@ public class Board : MonoBehaviour
     private float CellHeight => this.prefab.RectTransform.rect.height;
 
     private Cell[,] cells;
-    
+
 
     private void Awake()
     {
@@ -30,7 +30,10 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < BoardConstant.boardSize; j++)
             {
-                Cell newCell = Instantiate(this.prefab, this.transform);
+                Cell newCell = Instantiate(this.prefab, transform);
+                newCell.gameObject.SetActive(true);
+                newCell.DefaultGraphic.gameObject.SetActive(true);
+                newCell.IsStatic = true;
                 this.cells[i, j] = newCell;
                 SetCellPosition(i, j);
             }
