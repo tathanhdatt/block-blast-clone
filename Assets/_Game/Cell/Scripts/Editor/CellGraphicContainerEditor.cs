@@ -4,17 +4,18 @@ using UnityEngine;
 [CustomEditor(typeof(CellGraphicContainer))]
 public class CellGraphicContainerEditor : Editor
 {
+    private CellGraphicContainer Container => target as CellGraphicContainer;
+
     public override void OnInspectorGUI()
     {
-        CellGraphicContainer container = target as CellGraphicContainer;
-        if (container == null) return;
+        if (Container == null) return;
         serializedObject.Update();
-        AddButtons(container);
-        DrawItems(container);
+        AddButtons(Container);
+        DrawItems(Container);
         serializedObject.ApplyModifiedProperties();
         if (GUI.changed)
         {
-            EditorUtility.SetDirty(container);
+            EditorUtility.SetDirty(Container);
         }
     }
 
