@@ -7,6 +7,7 @@ public class PlaceBlockHandler : IDisposable
     private List<BoardCell> boardCells = new List<BoardCell>(0);
 
     public event Action OnRunOutOfBlock;
+    public event Action<List<int>, List<int>> ClearBoard;
 
     public void SetBlocks(List<Block> blocks)
     {
@@ -42,6 +43,7 @@ public class PlaceBlockHandler : IDisposable
         if (block.CanPlace())
         {
             PlaceBlock();
+            CheckCanClearBoard();
             RemoveListenBlockEvent(block);
             this.blocks.Remove(block);
             UnityEngine.Object.Destroy(block.gameObject);
@@ -52,6 +54,25 @@ public class PlaceBlockHandler : IDisposable
         }
 
         CheckRunOutOfBlocks();
+    }
+
+    private void CheckCanClearBoard()
+    {
+        List<int> x = new List<int>(5);
+        List<int> y = new List<int>(5);
+        foreach (BoardCell boardCell in this.boardCells)
+        {
+            if (!x.Contains(boardCell.X))
+            {
+                x.Add(boardCell.X);
+            }
+
+            if (!y.Contains(boardCell.Y))
+            {
+                y.Add(boardCell.Y);
+            }
+        }
+        ClearBoard?.Invoke(x, y);
     }
 
     private void CheckRunOutOfBlocks()
