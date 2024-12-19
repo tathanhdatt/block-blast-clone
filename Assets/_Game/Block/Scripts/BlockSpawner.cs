@@ -22,10 +22,6 @@ public class BlockSpawner : MonoBehaviour
     [SerializeField]
     private List<RectTransform> spawnPoints;
 
-    [Title("Board")]
-    [SerializeField, Required]
-    private BoardGenerator boardGenerator;
-
     [Title("Read Only Attributes")]
     [SerializeField, ReadOnly]
     private BlockTemplate currentTemplate;
@@ -35,21 +31,32 @@ public class BlockSpawner : MonoBehaviour
 
     private readonly List<Block> blockHolders = new List<Block>();
 
-    public List<Block> Spawn()
+    public List<Block> Spawn(BlockTemplate template)
     {
         this.blockHolders.Clear();
-        foreach (RectTransform spawnPoint in this.spawnPoints)
+        SpawnFirstBlockByGivenTemplate(template);
+        List<RectTransform> remainingSpawnPoints =
+            this.spawnPoints.GetRange(1, this.spawnPoints.Count - 1);
+        foreach (RectTransform spawnPoint in remainingSpawnPoints)
         {
+            this.currentTemplate = this.templates.RandomItem();
             this.blockHolders.Add(SpawnBlock(spawnPoint));
         }
 
         return this.blockHolders;
     }
 
+    private void SpawnFirstBlockByGivenTemplate(BlockTemplate template)
+    {
+        this.currentTemplate = template;
+        this.blockHolders.Add(SpawnBlock(this.spawnPoints[0]));
+    }
+
     private Block SpawnBlock(RectTransform spawnPoint)
     {
-        this.currentTemplate = GetRandomTemplate();
         Block block = SpawnBlockHolder(spawnPoint);
+        block.Width = this.currentTemplate.width;
+        block.Height = this.currentTemplate.height;
         for (int i = 0; i < this.currentTemplate.height; i++)
         {
             for (int j = 0; j < this.currentTemplate.width; j++)
@@ -57,20 +64,16 @@ public class BlockSpawner : MonoBehaviour
                 int index = i * this.currentTemplate.width + j;
                 bool isActiveCell = this.currentTemplate.shape[index];
                 if (!isActiveCell) continue;
-                Vector3 position = GetCellPosition(j, i);
+                Vector3 position = GetCellPosition(i, j);
                 BlockCell cell = SpawnCell(block, position);
+                cell.SetXY(j, i);
+                cell.blockName.SetText($"{i},{j}");
+                cell.name = this.currentTemplate.name;
                 block.AddBlockCell(cell);
             }
         }
 
         return block;
-    }
-
-
-    private BlockTemplate GetRandomTemplate()
-    {
-        int randomIndex = Random.Range(0, this.templates.Count);
-        return this.templates[randomIndex];
     }
 
     private Block SpawnBlockHolder(RectTransform spawnPoint)
@@ -87,8 +90,8 @@ public class BlockSpawner : MonoBehaviour
     private Vector3 GetCellPosition(int row, int column)
     {
         Vector3 position = Vector3.zero;
-        position.x = CellWidth * row;
-        position.y = CellHeight * column;
+        position.x = CellWidth * column;
+        position.y = CellHeight * row;
         if (this.currentTemplate.width > 1)
         {
             position = AlignPosition(position);

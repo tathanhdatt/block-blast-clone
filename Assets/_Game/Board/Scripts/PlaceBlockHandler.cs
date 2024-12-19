@@ -8,6 +8,7 @@ public class PlaceBlockHandler : IDisposable
 
     public event Action OnRunOutOfBlock;
     public event Action<List<int>, List<int>> ClearBoard;
+    public event Action CheckGameOver;
 
     public void SetBlocks(List<Block> blocks)
     {
@@ -43,10 +44,11 @@ public class PlaceBlockHandler : IDisposable
         if (block.CanPlace())
         {
             PlaceBlock();
-            CheckCanClearBoard();
+            ClearBoardIfNeeded();
             RemoveListenBlockEvent(block);
             this.blocks.Remove(block);
             UnityEngine.Object.Destroy(block.gameObject);
+            CheckGameOver?.Invoke();
         }
         else
         {
@@ -56,7 +58,7 @@ public class PlaceBlockHandler : IDisposable
         CheckRunOutOfBlocks();
     }
 
-    private void CheckCanClearBoard()
+    private void ClearBoardIfNeeded()
     {
         List<int> x = new List<int>(5);
         List<int> y = new List<int>(5);

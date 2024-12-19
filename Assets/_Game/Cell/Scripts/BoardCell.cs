@@ -49,9 +49,9 @@ public class BoardCell : Cell
         SetActiveGraphic(cellGraphicID);
     }
 
-    public void Place()
+    public void Place(bool force = false)
     {
-        if (!this.isHovering) return;
+        if (!force && !this.isHovering) return;
         this.isOccupied = true;
         this.activeGraphic.gameObject.SetActive(true);
         this.activeGraphic.color = Color.white;
@@ -60,8 +60,8 @@ public class BoardCell : Cell
     public async void Clear()
     {
         if (!this.isOccupied) return;
-        await ScaleActiveImageToZero();
         this.isOccupied = false;
+        await ScaleActiveImageToZero();
         ResetToDefault();
     }
 

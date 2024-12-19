@@ -1,9 +1,13 @@
 ﻿using Dt.Attribute;
+using Dt.Extension;
 using UnityEngine;
 
 public class BoardGenerator : MonoBehaviour
 {
     private const int Middle = BoardConstant.boardSize / 2;
+
+    [SerializeField, ReadOnly]
+    private BoardTemplate template;
 
     [SerializeField, Required]
     private BoardCell prefab;
@@ -14,8 +18,9 @@ public class BoardGenerator : MonoBehaviour
     private BoardCell[,] cells;
     public BoardCell[,] Cells => this.cells;
 
-    public void Initialize()
+    public void Initialize(BoardTemplate template)
     {
+        this.template = template;
         GenerateCells();
     }
 
@@ -26,14 +31,30 @@ public class BoardGenerator : MonoBehaviour
         {
             for (int j = 0; j < BoardConstant.boardSize; j++)
             {
-                BoardCell newCell = Instantiate(this.prefab, transform);
-                newCell.gameObject.SetActive(true);
-                newCell.DefaultGraphic.gameObject.SetActive(true);
-                this.cells[j, i] = newCell;
-                newCell.SetXY(j, i);
-                SetCellPosition(j, i);
+                InstantiateCell(j, i);
             }
         }
+    }
+
+    private void InstantiateCell(int x, int y)
+    {
+        BoardCell newCell = Instantiate(this.prefab, transform);
+        newCell.gameObject.SetActive(true);
+        this.cells[x, y] = newCell;
+        newCell.SetXY(x, y);
+        SetCellPosition(x, y);
+        bool isActive = this.template.shape[y * BoardConstant.boardSize + x];
+        if (isActive)
+        {
+            SetGraphicForActiveCell(newCell);
+        }
+    }
+
+    private void SetGraphicForActiveCell(BoardCell cell)
+    {
+        cell.Place(true);
+        cell.SetActiveGraphic(EnumExtension.GetRandom<CellGraphicID>());
+        cell.ActiveGraphic.gameObject.SetActive(true);
     }
 
     private void SetCellPosition(int row, int column)
