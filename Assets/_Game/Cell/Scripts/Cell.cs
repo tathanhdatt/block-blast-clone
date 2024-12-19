@@ -12,15 +12,11 @@ public abstract class Cell : MonoBehaviour
     [SerializeField, Required]
     protected Image activeGraphic;
 
-    [SerializeField, Required]
-    protected Image defaultGraphic;
-
     [SerializeField, ReadOnly]
     protected CellGraphicID graphicID;
 
     public RectTransform RectTransform => transform as RectTransform;
     public Image ActiveGraphic => this.activeGraphic;
-    public Image DefaultGraphic => this.defaultGraphic;
 
     public void SetActiveGraphic(CellGraphicID cellGraphicID)
     {

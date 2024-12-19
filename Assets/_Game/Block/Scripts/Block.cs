@@ -6,8 +6,9 @@ using Dt.Extension;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Block : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler,
-    IBeginDragHandler
+public class Block : MonoBehaviour,
+    IPointerDownHandler, IPointerUpHandler,
+    IDragHandler, IEndDragHandler, IBeginDragHandler
 {
     [Title("Scale")]
     [SerializeField]
@@ -17,6 +18,12 @@ public class Block : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragH
     private Vector3 dragScale;
 
     [Title("Read Only Attributes")]
+    [SerializeField, ReadOnly]
+    private int width;
+
+    [SerializeField, ReadOnly]
+    private int height;
+
     [SerializeField, ReadOnly]
     private Canvas gameCanvas;
 
@@ -30,10 +37,25 @@ public class Block : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragH
     private int maxSiblingIndex;
 
     [SerializeField, ReadOnly]
+    private bool isDragging;
+
+    [SerializeField, ReadOnly]
     private List<BlockCell> blockCells = new List<BlockCell>(25);
 
     [SerializeField, ReadOnly]
     private List<BoardCell> hitBoardCells = new List<BoardCell>(25);
+
+    public int Width
+    {
+        get => this.width;
+        set => this.width = value;
+    }
+
+    public int Height
+    {
+        get => this.height;
+        set => this.height = value;
+    }
 
     public Canvas GameCanvas
     {
@@ -53,6 +75,7 @@ public class Block : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragH
     }
 
     public RectTransform RectTransform => transform as RectTransform;
+    public List<BlockCell> BlockCells => this.blockCells;
 
     public event Action<Block> OnBeginDragging;
     public event Action<Block> OnDragging;
@@ -76,6 +99,12 @@ public class Block : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragH
         RectTransform.SetSiblingIndex(this.maxSiblingIndex);
     }
 
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        this.isDragging = true;
+        OnBeginDragging?.Invoke(this);
+    }
+
     public void OnDrag(PointerEventData eventData)
     {
         OnDragging?.Invoke(this);
@@ -88,21 +117,18 @@ public class Block : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragH
         RectTransform.localPosition = localPosition;
     }
 
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        this.isDragging = false;
+        OnEndDragging?.Invoke(this);
+    }
+
     public void ResetStatus()
     {
         RectTransform.DOScale(this.initialScale, 0.1f).SetEase(Ease.OutQuad);
         RectTransform.DOLocalMove(this.initialPosition, 0.1f).SetEase(Ease.OutQuad);
     }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        OnEndDragging?.Invoke(this);
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        OnBeginDragging?.Invoke(this);
-    }
 
     public List<BoardCell> HitBoardCells()
     {
@@ -121,6 +147,13 @@ public class Block : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragH
 
     public bool CanPlace()
     {
+        if (this.hitBoardCells.IsEmpty()) return false;
         return this.hitBoardCells.Count == this.blockCells.Count;
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (this.isDragging) return;
+        ResetStatus();
     }
 }

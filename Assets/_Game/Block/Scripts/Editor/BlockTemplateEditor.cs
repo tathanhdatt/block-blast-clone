@@ -33,7 +33,7 @@ public class BlockTemplateEditor : Editor
 
     private void DrawShapeInput()
     {
-        for (int i = 0; i < Template.height; i++)
+        for (int i = Template.height - 1; i >= 0; i--)
         {
             GUILayout.BeginHorizontal();
             DrawShapeRowInput(i);
@@ -42,12 +42,13 @@ public class BlockTemplateEditor : Editor
         }
     }
 
-    private void DrawShapeRowInput(int columnIndex)
+    private void DrawShapeRowInput(int rowIndex)
     {
         for (int j = 0; j < Template.width; j++)
         {
-            int index = columnIndex * Template.width + j;
-            Template.shape[index] = GUILayout.Toggle(Template.shape[index], "", this.toggleStyle);
+            int index = rowIndex * Template.width + j;
+            Template.shape[index] = GUILayout.Toggle(Template.shape[index], $"{rowIndex}|{j}", this
+                .toggleStyle);
             GUILayout.Space(10);
         }
     }
@@ -72,7 +73,7 @@ public class BlockTemplateEditor : Editor
 
     private GUIStyle CreateToggleStyle()
     {
-        GUIStyle toggleStyle = new GUIStyle(EditorStyles.miniButtonMid)
+        GUIStyle style = new GUIStyle(EditorStyles.miniButtonMid)
         {
             fixedWidth = 50,
             fixedHeight = 50,
@@ -85,6 +86,6 @@ public class BlockTemplateEditor : Editor
                 background = Texture2D.whiteTexture
             }
         };
-        return toggleStyle;
+        return style;
     }
 }
