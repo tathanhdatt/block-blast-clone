@@ -7,7 +7,6 @@
     LightGreen = 4,
     LightOrange = 5,
     Pink = 6,
-    DarkBlue = 7,
     Blue = 8,
     Green = 9,
     DarkGreen = 10,

@@ -8,11 +8,11 @@ namespace Dt.Attribute.Editor
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            EditorGUI.BeginProperty(position, label, property);
             GUI.enabled = false;
+            EditorGUI.BeginProperty(position, label, property);
             EditorGUI.PropertyField(position, property, label);
-            GUI.enabled = true;
             EditorGUI.EndProperty();
+            GUI.enabled = true;
         }
     }
 }

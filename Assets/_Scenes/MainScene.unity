@@ -157,6 +157,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &367936680
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 367936681}
+  - component: {fileID: 367936682}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &367936681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367936680}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &367936682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367936680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3a59b0d01941bdba523c7a21257b62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardGenerator: {fileID: 903409441}
+  blockSpawner: {fileID: 1060115764}
+  blocks: []
 --- !u!1 &463027639
 GameObject:
   m_ObjectHideFlags: 0
@@ -516,7 +563,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9ba68c949f74b4aba96d48a6b00fbcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5289109458105332031, guid: a72af4a194af0364484431680815c482, type: 3}
+  prefab: {fileID: 2351262005758823152, guid: a72af4a194af0364484431680815c482, type: 3}
 --- !u!1 &1060115762
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,13 +642,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: be68a7e0d6b9fa740bbb410bb8cc0d0a, type: 2}
   - {fileID: 11400000, guid: 25b8898c3c2745d408eb515416291f70, type: 2}
   - {fileID: 11400000, guid: 3b2642cab5db76242ae97d4474fa8f89, type: 2}
-  cellPrefab: {fileID: 5289109458105332031, guid: a72af4a194af0364484431680815c482, type: 3}
-  blockHolderPrefab: {fileID: 725919808542593077, guid: ad9fe53326364f845996db75063ace4e, type: 3}
+  cellPrefab: {fileID: 8771863014308304497, guid: 57bfe1b206758144194fca460ab62f39, type: 3}
+  blockPrefab: {fileID: 725919808542593077, guid: ad9fe53326364f845996db75063ace4e, type: 3}
   gameCanvas: {fileID: 463027642}
   spawnPoints:
   - {fileID: 1565400702}
   - {fileID: 493808508}
   - {fileID: 502464033}
+  boardGenerator: {fileID: 0}
+  currentTemplate: {fileID: 0}
 --- !u!1 &1565400701
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,3 +772,4 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 463027643}
   - {fileID: 1570353623}
+  - {fileID: 367936681}
