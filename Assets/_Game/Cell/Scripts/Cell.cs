@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Cell : MonoBehaviour
+public abstract class Cell : MonoBehaviour
 {
     [Title("Container")]
     [SerializeField, Required]
@@ -10,27 +10,21 @@ public class Cell : MonoBehaviour
 
     [Title("Graphic")]
     [SerializeField, Required]
-    private Image activeGraphic;
+    protected Image activeGraphic;
 
     [SerializeField, Required]
-    private Image defaultGraphic;
+    protected Image defaultGraphic;
 
-    [Title("Read Only Attributes")]
     [SerializeField, ReadOnly]
-    private bool isStatic;
+    protected CellGraphicID graphicID;
 
     public RectTransform RectTransform => transform as RectTransform;
     public Image ActiveGraphic => this.activeGraphic;
     public Image DefaultGraphic => this.defaultGraphic;
 
-    public bool IsStatic
-    {
-        get => this.isStatic;
-        set => this.isStatic = value;
-    }
-
     public void SetActiveGraphic(CellGraphicID cellGraphicID)
     {
+        this.graphicID = cellGraphicID;
         foreach (CellGraphicItem item in this.graphicContainer.items)
         {
             if (item.id != cellGraphicID) continue;

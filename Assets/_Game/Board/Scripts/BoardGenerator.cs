@@ -1,22 +1,18 @@
-﻿using System;
-using Dt.Attribute;
+﻿using Dt.Attribute;
 using UnityEngine;
 
-public class Board : MonoBehaviour
+public class BoardGenerator : MonoBehaviour
 {
+    private const int Middle = BoardConstant.boardSize / 2;
+
     [SerializeField, Required]
-    private Cell prefab;
+    private BoardCell prefab;
 
     private float CellWidth => this.prefab.RectTransform.rect.width;
     private float CellHeight => this.prefab.RectTransform.rect.height;
 
-    private Cell[,] cells;
-
-
-    private void Awake()
-    {
-        Initialize();
-    }
+    private BoardCell[,] cells;
+    public BoardCell[,] Cells => this.cells;
 
     public void Initialize()
     {
@@ -25,27 +21,26 @@ public class Board : MonoBehaviour
 
     private void GenerateCells()
     {
-        this.cells = new Cell[BoardConstant.boardSize, BoardConstant.boardSize];
+        this.cells = new BoardCell[BoardConstant.boardSize, BoardConstant.boardSize];
         for (int i = 0; i < BoardConstant.boardSize; i++)
         {
             for (int j = 0; j < BoardConstant.boardSize; j++)
             {
-                Cell newCell = Instantiate(this.prefab, transform);
+                BoardCell newCell = Instantiate(this.prefab, transform);
                 newCell.gameObject.SetActive(true);
                 newCell.DefaultGraphic.gameObject.SetActive(true);
-                newCell.IsStatic = true;
-                this.cells[i, j] = newCell;
-                SetCellPosition(i, j);
+                this.cells[j, i] = newCell;
+                newCell.SetXY(j, i);
+                SetCellPosition(j, i);
             }
         }
     }
 
     private void SetCellPosition(int row, int column)
     {
-        const int middle = BoardConstant.boardSize / 2;
         Vector3 position = Vector3.zero;
-        position.x = CellWidth * (row - middle) + CellWidth / 2;
-        position.y = CellHeight * (column - middle) + CellHeight / 2;
+        position.x = CellWidth * (row - Middle) + CellWidth / 2;
+        position.y = CellHeight * (column - Middle) + CellHeight / 2;
         this.cells[row, column].RectTransform.localPosition = position;
     }
 }

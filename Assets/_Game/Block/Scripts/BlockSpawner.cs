@@ -9,13 +9,10 @@ public class BlockSpawner : MonoBehaviour
     private List<BlockTemplate> templates;
 
     [SerializeField, Required]
-    private Cell cellPrefab;
+    private BlockCell cellPrefab;
 
     [SerializeField, Required]
-    private BlockHolder blockHolderPrefab;
-
-    private float CellWidth => this.cellPrefab.RectTransform.rect.width;
-    private float CellHeight => this.cellPrefab.RectTransform.rect.height;
+    private Block blockPrefab;
 
     [Title("Game Canvas")]
     [SerializeField, Required]
@@ -25,39 +22,50 @@ public class BlockSpawner : MonoBehaviour
     [SerializeField]
     private List<RectTransform> spawnPoints;
 
+    [Title("Board")]
+    [SerializeField, Required]
+    private BoardGenerator boardGenerator;
+
     [Title("Read Only Attributes")]
     [SerializeField, ReadOnly]
     private BlockTemplate currentTemplate;
 
-    private void Awake()
-    {
-        SpawnBlockAtSpawnPoints();
-    }
+    private float CellWidth => this.cellPrefab.RectTransform.rect.width;
+    private float CellHeight => this.cellPrefab.RectTransform.rect.height;
 
-    public void SpawnBlockAtSpawnPoints()
+    private readonly List<Block> blockHolders = new List<Block>();
+
+    public List<Block> Spawn()
     {
+        this.blockHolders.Clear();
         foreach (RectTransform spawnPoint in this.spawnPoints)
         {
-            SpawnBlock(spawnPoint);
+            this.blockHolders.Add(SpawnBlock(spawnPoint));
         }
+
+        return this.blockHolders;
     }
 
-    private void SpawnBlock(RectTransform spawnPoint)
+    private Block SpawnBlock(RectTransform spawnPoint)
     {
         this.currentTemplate = GetRandomTemplate();
-        BlockHolder blockHolder = SpawnBlockHolder(spawnPoint);
+        Block block = SpawnBlockHolder(spawnPoint);
         for (int i = 0; i < this.currentTemplate.height; i++)
         {
             for (int j = 0; j < this.currentTemplate.width; j++)
             {
-                Vector3 position = GetCellPosition(j, i);
-                Cell cell = SpawnCell(blockHolder, position);
                 int index = i * this.currentTemplate.width + j;
                 bool isActiveCell = this.currentTemplate.shape[index];
-                cell.gameObject.SetActive(isActiveCell);
+                if (!isActiveCell) continue;
+                Vector3 position = GetCellPosition(j, i);
+                BlockCell cell = SpawnCell(block, position);
+                block.AddBlockCell(cell);
             }
         }
+
+        return block;
     }
+
 
     private BlockTemplate GetRandomTemplate()
     {
@@ -65,15 +73,15 @@ public class BlockSpawner : MonoBehaviour
         return this.templates[randomIndex];
     }
 
-    private BlockHolder SpawnBlockHolder(RectTransform spawnPoint)
+    private Block SpawnBlockHolder(RectTransform spawnPoint)
     {
-        BlockHolder blockHolder = Instantiate(this.blockHolderPrefab, spawnPoint.transform);
-        blockHolder.RectTransform.SetParent(transform);
-        blockHolder.RectTransform.localPosition = spawnPoint.localPosition;
-        blockHolder.InitialPosition = spawnPoint.localPosition;
-        blockHolder.GameCanvas = this.gameCanvas;
-        blockHolder.MaxSiblingIndex = this.spawnPoints.Count;
-        return blockHolder;
+        Block block = Instantiate(this.blockPrefab, spawnPoint.transform);
+        block.RectTransform.SetParent(transform);
+        block.RectTransform.localPosition = spawnPoint.localPosition;
+        block.InitialPosition = spawnPoint.localPosition;
+        block.GameCanvas = this.gameCanvas;
+        block.MaxSiblingIndex = this.spawnPoints.Count;
+        return block;
     }
 
     private Vector3 GetCellPosition(int row, int column)
@@ -105,13 +113,13 @@ public class BlockSpawner : MonoBehaviour
         return position;
     }
 
-    private Cell SpawnCell(BlockHolder blockHolder, Vector3 position)
+    private BlockCell SpawnCell(Block block, Vector3 position)
     {
-        Cell cell = Instantiate(this.cellPrefab, blockHolder.RectTransform);
+        BlockCell cell = Instantiate(this.cellPrefab, block.RectTransform);
+        cell.gameObject.SetActive(true);
         cell.RectTransform.localPosition = position;
-        cell.SetActiveGraphic(blockHolder.GraphicID);
+        cell.SetActiveGraphic(block.GraphicID);
         cell.ActiveGraphic.gameObject.SetActive(true);
-        cell.IsStatic = false;
         return cell;
     }
 }

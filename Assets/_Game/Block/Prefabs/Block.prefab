@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9108298040536513999}
   - component: {fileID: 725919808542593077}
   m_Layer: 5
-  m_Name: BlockHolder
+  m_Name: Block
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +50,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialScale: {x: 0.6, y: 0.6, z: 0.6}
   dragScale: {x: 1, y: 1, z: 1}
-  graphicContainer: {fileID: 11400000, guid: a1c54110e8fa58b41b375425ab7960bf, type: 2}
   gameCanvas: {fileID: 0}
   initialPosition: {x: 0, y: 0, z: 0}
-  cellGraphic: {fileID: 0}
+  graphicID: 0
+  maxSiblingIndex: 0
+  blockCells: []
+  hitBoardCells: []
