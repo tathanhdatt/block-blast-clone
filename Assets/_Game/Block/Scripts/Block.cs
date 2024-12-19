@@ -17,6 +17,9 @@ public class Block : MonoBehaviour,
     [SerializeField]
     private Vector3 dragScale;
 
+    [SerializeField]
+    private Vector2 dragOffset;
+
     [Title("Read Only Attributes")]
     [SerializeField, ReadOnly]
     private int width;
@@ -97,6 +100,7 @@ public class Block : MonoBehaviour,
     {
         RectTransform.DOScale(this.dragScale, 0.1f).SetEase(Ease.OutQuad);
         RectTransform.SetSiblingIndex(this.maxSiblingIndex);
+        RectTransform.localPosition += new Vector3(this.dragOffset.x, this.dragOffset.y, 0);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -114,7 +118,7 @@ public class Block : MonoBehaviour,
             eventData.position,
             Camera.main,
             out Vector2 localPosition);
-        RectTransform.localPosition = localPosition;
+        RectTransform.localPosition = localPosition + this.dragOffset;
     }
 
     public void OnEndDrag(PointerEventData eventData)

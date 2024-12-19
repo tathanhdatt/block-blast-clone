@@ -42,8 +42,8 @@ public class GameOverChecker
     {
         foreach (Block block in this.blocks)
         {
-            bool isEnoughWidth = BoardConstant.boardSize - originX > block.Width;
-            bool isEnoughHeight = BoardConstant.boardSize - originY > block.Height;
+            bool isEnoughWidth = BoardConstant.boardSize - originX >= block.Width;
+            bool isEnoughHeight = BoardConstant.boardSize - originY >= block.Height;
             if (!isEnoughWidth || !isEnoughHeight) return false;
             bool canPlace = true;
             foreach (BlockCell cell in block.BlockCells)

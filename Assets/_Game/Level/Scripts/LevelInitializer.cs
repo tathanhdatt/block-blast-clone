@@ -35,7 +35,7 @@ public class LevelInitializer : MonoBehaviour, IDisposable
         InitializeTemplateProvider();
         InitializedBoardCleaner();
         InitializePlaceBlockHandler();
-        SpawnBlocks();
+        SpawnBlocks(3);
         InitializeGameOverChecker();
         this.boardCleaner.Clean();
     }
@@ -63,17 +63,30 @@ public class LevelInitializer : MonoBehaviour, IDisposable
         }
     }
 
-    private void SpawnBlocks()
+    private void SpawnBlocks(int numberOfTemplates = 1)
     {
         if (this.isGameOver) return;
-        BlockTemplate template = this.templatePlaceableProvider.GetTemplate();
-        if (template == null)
+        List<BlockTemplate> templates = new List<BlockTemplate>(3);
+        for (int i = 0; i < numberOfTemplates; i++)
         {
+            BlockTemplate template = this.templatePlaceableProvider.GetTemplate();
+            if (template == null)
+            {
+                break;
+            }
+
+            templates.Add(template);
+        }
+        Debug.Log($"Template Count: {templates.Count}");
+
+        if (templates.IsEmpty())
+        {
+            Debug.Log("No templates were spawned.");
             this.isGameOver = true;
         }
         else
         {
-            this.blocks = this.blockSpawner.Spawn(template);
+            this.blocks = this.blockSpawner.Spawn(templates);
             this.placeBlockHandler.SetBlocks(this.blocks);
         }
     }
@@ -94,7 +107,14 @@ public class LevelInitializer : MonoBehaviour, IDisposable
     private void OnCheckGameOverHandler()
     {
         if (this.blocks.IsEmpty()) return;
+        foreach (Block block in this.blocks)
+        {
+            Debug.Log(block.name, block.gameObject);
+        }
+
+        Debug.Log("Checking game over...");
         this.isGameOver = this.gameOverChecker.CheckGameOver(this.blocks);
+        Debug.Log("Game over: " + this.isGameOver);
     }
 
     private void InitializedBoardCleaner()
