@@ -14,11 +14,13 @@ public class GameManager : MonoBehaviour
     private List<Block> blocks;
 
     private PlaceBlockHandler placeBlockHandler;
+    private BoardCleaner boardCleaner;
 
     private void Awake()
     {
         Application.targetFrameRate = 60;
         GenerateBoard();
+        InitializedBoardCleaner();
         InitializePlaceBlockHandler();
         SpawnBlocks();
     }
@@ -38,6 +40,25 @@ public class GameManager : MonoBehaviour
     {
         this.placeBlockHandler = new PlaceBlockHandler();
         this.placeBlockHandler.OnRunOutOfBlock += OnRunOutOfBlockHandle;
+        this.placeBlockHandler.ClearBoard += OnClearBoardHandler;
+    }
+
+    private void InitializedBoardCleaner()
+    {
+        this.boardCleaner = new BoardCleaner(this.boardGenerator.Cells);
+    }
+
+    private void OnClearBoardHandler(List<int> x, List<int> y)
+    {
+        foreach (int column in x)
+        {
+            this.boardCleaner.CleanColumnIfFull(column);
+        }
+
+        foreach (int row in y)
+        {
+            this.boardCleaner.CleanRowIfFull(row);
+        }
     }
 
     private void OnRunOutOfBlockHandle()

@@ -37,6 +37,7 @@ public class BoardCell : Cell
         this.activeGraphic.gameObject.SetActive(false);
         this.activeGraphic.color = Color.white;
         this.isHovering = false;
+        this.activeGraphic.transform.localScale = Vector3.one;
     }
 
     public void Hover(CellGraphicID cellGraphicID)
@@ -60,8 +61,8 @@ public class BoardCell : Cell
     {
         if (!this.isOccupied) return;
         await ScaleActiveImageToZero();
-        this.activeGraphic.gameObject.SetActive(false);
-        this.activeGraphic.transform.localScale = Vector3.one;
+        this.isOccupied = false;
+        ResetToDefault();
     }
 
     private Task ScaleActiveImageToZero()
