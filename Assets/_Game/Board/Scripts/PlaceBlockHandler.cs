@@ -79,7 +79,7 @@ public class PlaceBlockHandler : IDisposable
 
     private void CheckRunOutOfBlocks()
     {
-        if (this.blocks.Count == 0)
+        if (this.blocks.IsEmpty())
         {
             OnRunOutOfBlock?.Invoke();
         }

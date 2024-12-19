@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Dt.Attribute;
 using UnityEngine;
 
@@ -31,12 +32,29 @@ public class BlockSpawner : MonoBehaviour
 
     private readonly List<Block> blockHolders = new List<Block>();
 
-    public List<Block> Spawn(BlockTemplate template)
+    public List<Block> Spawn(List<BlockTemplate> templates)
     {
         this.blockHolders.Clear();
-        SpawnFirstBlockByGivenTemplate(template);
+        int numberTemplates = Mathf.Clamp(templates.Count, 0, this.spawnPoints.Count);
+        try
+        {
+            SpawnBlockByGivenTemplates(templates.GetRange(0, numberTemplates));
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+            Debug.Log($"Number of templates 1: {templates.Count}");
+            Debug.Log($"Number of templates 2: {numberTemplates}");
+        }
+
+        int numberOfRemainSpawnPoints = this.spawnPoints.Count - numberTemplates;
+        if (numberOfRemainSpawnPoints <= 0)
+        {
+            return this.blockHolders;
+        }
+
         List<RectTransform> remainingSpawnPoints =
-            this.spawnPoints.GetRange(1, this.spawnPoints.Count - 1);
+            this.spawnPoints.GetRange(numberTemplates, numberOfRemainSpawnPoints);
         foreach (RectTransform spawnPoint in remainingSpawnPoints)
         {
             this.currentTemplate = this.templates.RandomItem();
@@ -46,10 +64,13 @@ public class BlockSpawner : MonoBehaviour
         return this.blockHolders;
     }
 
-    private void SpawnFirstBlockByGivenTemplate(BlockTemplate template)
+    private void SpawnBlockByGivenTemplates(List<BlockTemplate> templates)
     {
-        this.currentTemplate = template;
-        this.blockHolders.Add(SpawnBlock(this.spawnPoints[0]));
+        for (int i = 0; i < templates.Count; i++)
+        {
+            this.currentTemplate = templates[i];
+            this.blockHolders.Add(SpawnBlock(this.spawnPoints[i]));
+        }
     }
 
     private Block SpawnBlock(RectTransform spawnPoint)
@@ -67,8 +88,6 @@ public class BlockSpawner : MonoBehaviour
                 Vector3 position = GetCellPosition(i, j);
                 BlockCell cell = SpawnCell(block, position);
                 cell.SetXY(j, i);
-                cell.blockName.SetText($"{i},{j}");
-                cell.name = this.currentTemplate.name;
                 block.AddBlockCell(cell);
             }
         }

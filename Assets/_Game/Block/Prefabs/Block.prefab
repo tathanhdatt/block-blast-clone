@@ -48,11 +48,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba07cc12c7d481a87a8dae6d4d60d7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialScale: {x: 0.6, y: 0.6, z: 0.6}
+  initialScale: {x: 0.4, y: 0.4, z: 0.4}
   dragScale: {x: 1, y: 1, z: 1}
+  dragOffset: {x: 0, y: 200}
+  width: 0
+  height: 0
   gameCanvas: {fileID: 0}
   initialPosition: {x: 0, y: 0, z: 0}
   graphicID: 0
   maxSiblingIndex: 0
+  isDragging: 0
   blockCells: []
   hitBoardCells: []

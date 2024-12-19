@@ -1,11 +1,8 @@
 ﻿using Dt.Attribute;
-using TMPro;
 using UnityEngine;
 
 public class BlockCell : Cell
 {
-    public TMP_Text blockName;
-
     [Title("Block Cell")]
     [SerializeField]
     private LayerMask layerMask;
