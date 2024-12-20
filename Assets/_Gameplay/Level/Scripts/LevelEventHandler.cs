@@ -23,11 +23,14 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     [SerializeField, ReadOnly]
     private bool isGameOver;
 
+    [SerializeField, ReadOnly]
+    private bool isRunOutOfBlock;
+
     private PlaceBlockHandler placeBlockHandler;
     private BoardCleaner boardCleaner;
     private GameOverChecker gameOverChecker;
 
-    public void Initialize(BoardTemplate levelTemplate)
+    public async void Initialize(BoardTemplate levelTemplate)
     {
         this.isGameOver = false;
         GenerateBoard(levelTemplate);
@@ -36,7 +39,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         InitializePlaceBlockHandler();
         SpawnBlocks(3);
         InitializeGameOverChecker();
-        this.boardCleaner.Clean();
+        await this.boardCleaner.Clean();
     }
 
     private void InitializeTemplateProvider()
@@ -121,14 +124,17 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         this.boardCleaner = new BoardCleaner(this.boardGenerator.Cells);
     }
 
-    private void OnClearBoardHandler(List<int> columns, List<int> rows)
+    private async void OnClearBoardHandler(List<int> columns, List<int> rows)
     {
-        this.boardCleaner.Clean(rows, columns);
+        await this.boardCleaner.Clean(rows, columns);
+        if (!this.isRunOutOfBlock) return;
+        SpawnBlocks();
+        this.isRunOutOfBlock = false;
     }
 
     private void OnRunOutOfBlockHandle()
     {
-        SpawnBlocks();
+        this.isRunOutOfBlock = true;
     }
 
     public void Dispose()

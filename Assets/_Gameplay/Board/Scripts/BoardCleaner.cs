@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Core.AudioService;
 using Core.Service;
 
@@ -16,7 +17,7 @@ public class BoardCleaner
         // this.colEffectors = colEffectors;
     }
 
-    public void Clean(IList<int> rows = null, IList<int> cols = null)
+    public async Task Clean(IList<int> rows = null, IList<int> cols = null)
     {
         rows ??= IListExtension.CreateIntList(GameConstant.boardSize);
         cols ??= IListExtension.CreateIntList(GameConstant.boardSize);
@@ -29,6 +30,7 @@ public class BoardCleaner
 
         this.board.ClearRows(completedRows);
         this.board.ClearColumns(completedColumns);
+        await Task.CompletedTask;
     }
 
     
