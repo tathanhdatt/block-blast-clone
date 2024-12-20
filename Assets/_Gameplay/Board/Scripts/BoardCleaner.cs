@@ -7,14 +7,17 @@ public class BoardCleaner
     private readonly BoardCell[,] board;
     private readonly CompletedEffector[] rowEffectors;
     private readonly CompletedEffector[] colEffectors;
+    private readonly CompletedEffector borderEffector;
 
     public BoardCleaner(BoardCell[,] board,
         CompletedEffector[] rowEffectors,
-        CompletedEffector[] colEffectors)
+        CompletedEffector[] colEffectors,
+        CompletedEffector borderEffector)
     {
         this.board = board;
         this.rowEffectors = rowEffectors;
         this.colEffectors = colEffectors;
+        this.borderEffector = borderEffector;
     }
 
     public void CleanAndPlayEffect(IList<int> rows = null, IList<int> cols = null)
@@ -32,6 +35,22 @@ public class BoardCleaner
         this.board.ClearColumns(completedColumns);
         PlayCleanEffectRows(completedRows);
         PlayCleanEffectColumns(completedColumns);
+        if (!completedRows.IsEmpty())
+        {
+            CellGraphicID graphicID = this.board[0, rows[0]].GraphicID;
+            PlayBorderEffect(graphicID);
+        }
+        else if (!completedColumns.IsEmpty())
+        {
+            CellGraphicID graphicID = this.board[completedColumns[0], 0].GraphicID;
+            PlayBorderEffect(graphicID);
+        }
+    }
+
+    private void PlayBorderEffect(CellGraphicID graphicID)
+    {
+        string animationName = $"start_{this.borderEffector.GetAnimationNameFromId(graphicID)}";
+        this.borderEffector.Play(animationName);
     }
 
     private void PlayCleanEffectRows(IList<int> rows)

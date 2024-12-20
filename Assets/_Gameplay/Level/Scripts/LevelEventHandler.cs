@@ -120,10 +120,10 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
 
     private void InitializedBoardCleaner()
     {
-        this.boardCleaner =
-            new BoardCleaner(this.boardGenerator.Cells,
-                this.boardGenerator.RowEffectors,
-                this.boardGenerator.ColumnEffectors);
+        this.boardCleaner = new BoardCleaner(this.boardGenerator.Cells,
+            this.boardGenerator.RowEffectors,
+            this.boardGenerator.ColumnEffectors,
+            this.boardGenerator.BorderEffector);
     }
 
     private void OnClearBoardHandler(List<int> columns, List<int> rows)

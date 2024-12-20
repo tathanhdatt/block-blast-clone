@@ -19,6 +19,13 @@ public class CompletedEffector : MonoBehaviour, IDisposable
         gameObject.SetActive(false);
     }
 
+    public void Play(string animationName)
+    {
+        gameObject.SetActive(true);
+        if (string.IsNullOrEmpty(animationName)) return;
+        this.skeletonGraphic.AnimationState.SetAnimation(0, animationName, false);
+    }
+
     public void Play(CellGraphicID graphicID)
     {
         gameObject.SetActive(true);
@@ -27,7 +34,7 @@ public class CompletedEffector : MonoBehaviour, IDisposable
         this.skeletonGraphic.AnimationState.SetAnimation(0, animationName, false);
     }
 
-    private string GetAnimationNameFromId(CellGraphicID graphicID)
+    public string GetAnimationNameFromId(CellGraphicID graphicID)
     {
         return graphicID switch
         {
