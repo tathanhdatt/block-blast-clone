@@ -15,6 +15,11 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField, Required]
     private CompletedEffector completedEffectorPrefab;
 
+    [SerializeField, Required]
+    private CompletedEffector borderEffector;
+    
+    public CompletedEffector BorderEffector => this.borderEffector;
+
     private float CellWidth => this.prefab.RectTransform.rect.width;
     private float CellHeight => this.prefab.RectTransform.rect.height;
 
@@ -29,6 +34,7 @@ public class BoardGenerator : MonoBehaviour
     public void Initialize(BoardTemplate template)
     {
         this.template = template;
+        this.borderEffector.Initialize();
         GenerateCells();
         GenerateCompletedEffector();
     }
@@ -55,6 +61,7 @@ public class BoardGenerator : MonoBehaviour
             effector.transform.localPosition = position;
             effector.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
             effector.gameObject.SetActive(false);
+            effector.Initialize();
             ColumnEffectors[i] = effector;
         }
     }
