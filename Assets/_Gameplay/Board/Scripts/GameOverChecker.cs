@@ -23,9 +23,9 @@ public class GameOverChecker
     private bool CanPlace(List<Block> blocks)
     {
         this.blocks = blocks;
-        for (int i = 0; i < BoardConstant.boardSize; i++)
+        for (int i = 0; i < GameConstant.boardSize; i++)
         {
-            for (int j = 0; j < BoardConstant.boardSize; j++)
+            for (int j = 0; j < GameConstant.boardSize; j++)
             {
                 if (this.board[i, j].IsOccupied) continue;
                 if (CanPlaceBlockAt(i, j))
@@ -42,8 +42,8 @@ public class GameOverChecker
     {
         foreach (Block block in this.blocks)
         {
-            bool isEnoughWidth = BoardConstant.boardSize - originX >= block.Width;
-            bool isEnoughHeight = BoardConstant.boardSize - originY >= block.Height;
+            bool isEnoughWidth = GameConstant.boardSize - originX >= block.Width;
+            bool isEnoughHeight = GameConstant.boardSize - originY >= block.Height;
             if (!isEnoughWidth || !isEnoughHeight) return false;
             bool canPlace = true;
             foreach (BlockCell cell in block.BlockCells)

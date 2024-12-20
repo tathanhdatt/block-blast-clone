@@ -13,31 +13,17 @@ MonoBehaviour:
   m_Name: CellGraphic
   m_EditorClassIdentifier: 
   items:
-  - id: 8
-    graphic: {fileID: -6429493399158520243, guid: 90474ea99d9830640ada2b262e48e66a, type: 3}
-  - id: 14
-    graphic: {fileID: -4003223316803723154, guid: 7f183835dcf836841b8d3a5a0a8ddc35, type: 3}
-  - id: 12
-    graphic: {fileID: 109423879544192933, guid: bcdb8289f83654c408910768fefa2410, type: 3}
-  - id: 10
-    graphic: {fileID: 2295119859563902741, guid: 457f78232b968d7438c5e2b4de93bfff, type: 3}
   - id: 0
-    graphic: {fileID: -6022337359400110510, guid: f9d2147df676e834eb09fe525b7bbe9b, type: 3}
-  - id: 9
-    graphic: {fileID: -4987337320017983735, guid: fbe6450228729db4bafcad5cbbdcd998, type: 3}
-  - id: 3
-    graphic: {fileID: 3381847353060770671, guid: c1940d056cfdea64ebc4b2eec42e3349, type: 3}
-  - id: 13
-    graphic: {fileID: -705411627944680356, guid: e92da856a892ed44889b17d07e04d47d, type: 3}
-  - id: 4
-    graphic: {fileID: 6364686616301634630, guid: 6cb4aa269c0ab38459171ebf4be6223d, type: 3}
-  - id: 5
-    graphic: {fileID: -8630411738482924784, guid: f3309b44a894e0e48ac491928a736131, type: 3}
+    graphic: {fileID: -1225538313904568386, guid: 5f50c324413dbac4b954070ce00137aa, type: 3}
   - id: 1
-    graphic: {fileID: -933362716675021906, guid: 55a1bf32cd3e5f74d8699e8dee524ef7, type: 3}
-  - id: 11
-    graphic: {fileID: 4121880872312635667, guid: ed1bd47338e95cf48a1d3ad55ddbb5f7, type: 3}
-  - id: 6
-    graphic: {fileID: -7381184880430962403, guid: 42295062fdc005342bd4c587dc6f1acd, type: 3}
+    graphic: {fileID: 318327766714000277, guid: 112b4e0739ce81747bf723ee3ddc0ca9, type: 3}
   - id: 2
-    graphic: {fileID: -8923911374754931897, guid: fbd8d11a55ef9724299241cecfe87612, type: 3}
+    graphic: {fileID: 4778292885488530220, guid: cf0ff5b40a8cf4b41b40f736826cd74f, type: 3}
+  - id: 3
+    graphic: {fileID: 397473621863345801, guid: 20232726e65d3c6478276625e983ffaf, type: 3}
+  - id: 5
+    graphic: {fileID: -4070040407736118269, guid: 55a04538a2130b84091562b3a9f38fb0, type: 3}
+  - id: 4
+    graphic: {fileID: 7586811761191015072, guid: 3140e11a5a24c9d439d2bea57335bf93, type: 3}
+  - id: 6
+    graphic: {fileID: -7505253443391234971, guid: 019789252411c714096840ba3298a7b9, type: 3}

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Dt.Attribute;
 using UnityEngine;
 
 public class BlockSpawner : MonoBehaviour
 {
-    [Title("Template")]
-    [SerializeField]
-    private List<BlockTemplate> templates;
-
+    [Title("Prefab")]
     [SerializeField, Required]
     private BlockCell cellPrefab;
 
@@ -35,38 +31,14 @@ public class BlockSpawner : MonoBehaviour
     public List<Block> Spawn(List<BlockTemplate> templates)
     {
         this.blockHolders.Clear();
-        int numberTemplates = Mathf.Clamp(templates.Count, 0, this.spawnPoints.Count);
-        try
-        {
-            SpawnBlockByGivenTemplates(templates.GetRange(0, numberTemplates));
-        }
-        catch (Exception e)
-        {
-            Debug.Log(e.Message);
-            Debug.Log($"Number of templates 1: {templates.Count}");
-            Debug.Log($"Number of templates 2: {numberTemplates}");
-        }
-
-        int numberOfRemainSpawnPoints = this.spawnPoints.Count - numberTemplates;
-        if (numberOfRemainSpawnPoints <= 0)
-        {
-            return this.blockHolders;
-        }
-
-        List<RectTransform> remainingSpawnPoints =
-            this.spawnPoints.GetRange(numberTemplates, numberOfRemainSpawnPoints);
-        foreach (RectTransform spawnPoint in remainingSpawnPoints)
-        {
-            this.currentTemplate = this.templates.RandomItem();
-            this.blockHolders.Add(SpawnBlock(spawnPoint));
-        }
-
+        SpawnBlockByGivenTemplates(templates);
         return this.blockHolders;
     }
 
     private void SpawnBlockByGivenTemplates(List<BlockTemplate> templates)
     {
-        for (int i = 0; i < templates.Count; i++)
+        int numberOfBlocks = Mathf.Clamp(templates.Count, 0, GameConstant.maxBlocks);
+        for (int i = 0; i < numberOfBlocks; i++)
         {
             this.currentTemplate = templates[i];
             this.blockHolders.Add(SpawnBlock(this.spawnPoints[i]));

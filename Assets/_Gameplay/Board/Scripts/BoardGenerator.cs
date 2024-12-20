@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BoardGenerator : MonoBehaviour
 {
-    private const int Middle = BoardConstant.boardSize / 2;
+    private const int Middle = GameConstant.boardSize / 2;
 
     [SerializeField, ReadOnly]
     private BoardTemplate template;
@@ -26,10 +26,11 @@ public class BoardGenerator : MonoBehaviour
 
     private void GenerateCells()
     {
-        this.cells = new BoardCell[BoardConstant.boardSize, BoardConstant.boardSize];
-        for (int i = 0; i < BoardConstant.boardSize; i++)
+        ClearBoard();
+        this.cells = new BoardCell[GameConstant.boardSize, GameConstant.boardSize];
+        for (int i = 0; i < GameConstant.boardSize; i++)
         {
-            for (int j = 0; j < BoardConstant.boardSize; j++)
+            for (int j = 0; j < GameConstant.boardSize; j++)
             {
                 InstantiateCell(j, i);
             }
@@ -43,7 +44,7 @@ public class BoardGenerator : MonoBehaviour
         this.cells[x, y] = newCell;
         newCell.SetXY(x, y);
         SetCellPosition(x, y);
-        bool isActive = this.template.shape[y * BoardConstant.boardSize + x];
+        bool isActive = this.template.shape[y * GameConstant.boardSize + x];
         if (isActive)
         {
             SetGraphicForActiveCell(newCell);
@@ -63,5 +64,14 @@ public class BoardGenerator : MonoBehaviour
         position.x = CellWidth * (row - Middle) + CellWidth / 2;
         position.y = CellHeight * (column - Middle) + CellHeight / 2;
         this.cells[row, column].RectTransform.localPosition = position;
+    }
+
+    private void ClearBoard()
+    {
+        if (Cells == null) return;
+        foreach (BoardCell boardCell in Cells)
+        {
+            Destroy(boardCell.gameObject);
+        }
     }
 }
