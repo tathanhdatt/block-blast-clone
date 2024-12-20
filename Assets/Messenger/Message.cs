@@ -1,5 +1,4 @@
 ﻿public static class Message
 {
-    public const string beginDragBlock = "beginDragBlock";
-    public const string endDragBlock = "endDragBlock";
+    public const string gameOver = "Game Over";
 }
