@@ -74,9 +74,8 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         int numberOfRandomBlocks = GameConstant.maxBlocks - templates.Count;
         if (numberOfRandomBlocks > 0)
         {
-            templates.AddRange(
-                this.blockTemplateProvider
-                    .GetRandomBlockTemplates(numberOfRandomBlocks));
+            templates.AddRange(this.blockTemplateProvider
+                .GetRandomBlockTemplates(numberOfRandomBlocks));
         }
 
         if (templates.IsEmpty())
@@ -122,7 +121,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     private void InitializedBoardCleaner()
     {
         this.boardCleaner =
-            new BoardCleaner(this.boardGenerator.Cells, 
+            new BoardCleaner(this.boardGenerator.Cells,
                 this.boardGenerator.RowEffectors,
                 this.boardGenerator.ColumnEffectors);
     }
@@ -131,7 +130,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     {
         this.boardCleaner.CleanAndPlayEffect(rows, columns);
         if (!this.isRunOutOfBlock) return;
-        SpawnBlocks();
+        SpawnBlocks(2);
         this.isRunOutOfBlock = false;
     }
 

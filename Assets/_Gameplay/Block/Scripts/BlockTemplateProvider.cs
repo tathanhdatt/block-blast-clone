@@ -36,7 +36,9 @@ public class BlockTemplateProvider : MonoBehaviour
         List<BlockTemplate> templates = new List<BlockTemplate>(GameConstant.maxBlocks);
         for (int i = 0; i < numBlocks; i++)
         {
-            templates.Add(this.placeableBlockTemplateProvider.GetTemplate());
+            BlockTemplate template = this.placeableBlockTemplateProvider.GetTemplate();
+            if (template == null) break;
+            templates.Add(template);
         }
 
         return templates;
