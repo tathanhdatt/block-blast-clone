@@ -17,7 +17,7 @@ public class BoardTemplateEditor : Editor
             Template.shape.Clear();
         }
         GUILayout.Space(10);
-        for (int i = BoardConstant.boardSize - 1; i >= 0; i--)
+        for (int i = GameConstant.boardSize - 1; i >= 0; i--)
         {
             GUILayout.BeginHorizontal();
             DrawShapeRowInput(i);
@@ -34,9 +34,9 @@ public class BoardTemplateEditor : Editor
 
     private void DrawShapeRowInput(int rowIndex)
     {
-        for (int j = 0; j < BoardConstant.boardSize; j++)
+        for (int j = 0; j < GameConstant.boardSize; j++)
         {
-            int index = rowIndex * BoardConstant.boardSize + j;
+            int index = rowIndex * GameConstant.boardSize + j;
             Template.shape[index] = GUILayout.Toggle(Template.shape[index],
                 $"{rowIndex}|{j}", this.toggleStyle);
             GUILayout.Space(10);

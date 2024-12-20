@@ -4,7 +4,7 @@ using UnityEngine;
 public class LevelAutoPlayer : MonoBehaviour
 {
     [SerializeField, Required]
-    private LevelInitializer level;
+    private LevelEventHandler level;
 
     private void Awake()
     {
