@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Core.AudioService;
+using Core.Service;
 
 public class BoardCleaner
 {
@@ -11,10 +13,14 @@ public class BoardCleaner
 
     public void Clean(List<int> rows = null, List<int> cols = null)
     {
-        rows ??= CreateIntList(BoardConstant.boardSize);
-        cols ??= CreateIntList(BoardConstant.boardSize);
+        rows ??= CreateIntList(GameConstant.boardSize);
+        cols ??= CreateIntList(GameConstant.boardSize);
         List<int> completedRows = GetCompletedRows(rows);
         List<int> completedColumns = GetCompletedColumns(cols);
+        if (!completedRows.IsEmpty() || !completedColumns.IsEmpty())
+        {
+            ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.streak1);
+        }
         ClearRows(completedRows);
         ClearColumns(completedColumns);
     }
@@ -73,7 +79,7 @@ public class BoardCleaner
             else if (row != null && boardCell.Y == row) numberOfOccupiedCells++;
         }
 
-        return numberOfOccupiedCells == BoardConstant.boardSize;
+        return numberOfOccupiedCells == GameConstant.boardSize;
     }
 
     private void Clear(int? col = null, int? row = null)
