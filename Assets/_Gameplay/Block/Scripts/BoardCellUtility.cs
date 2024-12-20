@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public static class BoardUtility
+public static class BoardCellUtility
 {
     public static bool IsFull(this BoardCell[,] boardCells, int? row = null, int? column = null)
     {
@@ -92,7 +92,7 @@ public static class BoardUtility
             board.Clear(row: row);
         }
     }
-
+    
     public static void ClearColumns(this BoardCell[,] board, IList<int> cols)
     {
         foreach (int col in cols)

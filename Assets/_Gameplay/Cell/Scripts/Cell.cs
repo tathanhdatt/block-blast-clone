@@ -23,6 +23,7 @@ public abstract class Cell : MonoBehaviour
 
     public RectTransform RectTransform => transform as RectTransform;
     public Image ActiveGraphic => this.activeGraphic;
+    public CellGraphicID GraphicID => this.graphicID;
 
     public void SetActiveGraphic(CellGraphicID cellGraphicID)
     {

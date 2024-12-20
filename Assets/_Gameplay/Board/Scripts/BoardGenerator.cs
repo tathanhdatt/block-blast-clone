@@ -23,7 +23,7 @@ public class BoardGenerator : MonoBehaviour
     public CompletedEffector[] RowEffectors { get; } =
         new CompletedEffector[GameConstant.boardSize];
 
-    public CompletedEffector[] ColEffectors { get; } =
+    public CompletedEffector[] ColumnEffectors { get; } =
         new CompletedEffector[GameConstant.boardSize];
 
     public void Initialize(BoardTemplate template)
@@ -43,7 +43,7 @@ public class BoardGenerator : MonoBehaviour
             position.x = 0;
             effector.transform.position = position;
             effector.gameObject.SetActive(false);
-            this.RowEffectors[i] = effector;
+            RowEffectors[i] = effector;
         }
 
         for (int i = 0; i < GameConstant.boardSize; i++)
@@ -55,7 +55,7 @@ public class BoardGenerator : MonoBehaviour
             effector.transform.localPosition = position;
             effector.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
             effector.gameObject.SetActive(false);
-            this.ColEffectors[i] = effector;
+            ColumnEffectors[i] = effector;
         }
     }
 

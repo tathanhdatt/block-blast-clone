@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8183409ed2f44b380daa67f228294eb, type: 3}
-  m_Name: Level_0
+  m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
+  m_Name: shine_Atlas
   m_EditorClassIdentifier: 
-  shape: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  atlasFile: {fileID: 4900000, guid: 20684ca4e9dc1734c9ae6082b054d8b7, type: 3}
+  materials:
+  - {fileID: 2100000, guid: a414305615dda9f4c86feba012cd3d86, type: 2}
