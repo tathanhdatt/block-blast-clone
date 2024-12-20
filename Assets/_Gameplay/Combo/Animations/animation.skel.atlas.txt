@@ -1,0 +1,111 @@
+
+animation.skel.png
+size: 1988,731
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1
+  rotate: false
+  xy: 1456, 15
+  size: 525, 31
+  orig: 527, 33
+  offset: 1, 1
+  index: -1
+2
+  rotate: false
+  xy: 1456, 15
+  size: 525, 31
+  orig: 527, 33
+  offset: 1, 1
+  index: -1
+1.1
+  rotate: false
+  xy: 954, 48
+  size: 601, 111
+  orig: 617, 125
+  offset: 8, 7
+  index: -1
+2.2
+  rotate: false
+  xy: 954, 48
+  size: 601, 111
+  orig: 617, 125
+  offset: 8, 7
+  index: -1
+2.1
+  rotate: false
+  xy: 2, 2
+  size: 541, 54
+  orig: 543, 56
+  offset: 1, 1
+  index: -1
+3
+  rotate: false
+  xy: 545, 15
+  size: 909, 31
+  orig: 913, 33
+  offset: 2, 1
+  index: -1
+3.1
+  rotate: false
+  xy: 1003, 620
+  size: 983, 109
+  orig: 999, 121
+  offset: 8, 6
+  index: -1
+4
+  rotate: false
+  xy: 2, 551
+  size: 999, 178
+  orig: 1007, 186
+  offset: 4, 4
+  index: -1
+4.1
+  rotate: false
+  xy: 1003, 161
+  size: 951, 131
+  orig: 953, 134
+  offset: 1, 2
+  index: -1
+5.1
+  rotate: false
+  xy: 1003, 161
+  size: 951, 131
+  orig: 953, 134
+  offset: 1, 2
+  index: -1
+5
+  rotate: false
+  xy: 2, 371
+  size: 999, 178
+  orig: 1007, 186
+  offset: 4, 4
+  index: -1
+6
+  rotate: false
+  xy: 2, 191
+  size: 999, 178
+  orig: 1007, 186
+  offset: 4, 4
+  index: -1
+6.1
+  rotate: false
+  xy: 2, 58
+  size: 950, 131
+  orig: 953, 134
+  offset: 2, 2
+  index: -1
+7
+  rotate: false
+  xy: 1003, 294
+  size: 969, 148
+  orig: 969, 148
+  offset: 0, 0
+  index: -1
+8
+  rotate: false
+  xy: 1003, 444
+  size: 969, 174
+  orig: 969, 174
+  offset: 0, 0
+  index: -1

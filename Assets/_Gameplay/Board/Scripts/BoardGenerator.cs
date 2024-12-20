@@ -12,22 +12,57 @@ public class BoardGenerator : MonoBehaviour
     [SerializeField, Required]
     private BoardCell prefab;
 
+    [SerializeField, Required]
+    private CompletedEffector completedEffectorPrefab;
+
     private float CellWidth => this.prefab.RectTransform.rect.width;
     private float CellHeight => this.prefab.RectTransform.rect.height;
 
-    private BoardCell[,] cells;
-    public BoardCell[,] Cells => this.cells;
+    public BoardCell[,] Cells { get; private set; }
+
+    public CompletedEffector[] RowEffectors { get; } =
+        new CompletedEffector[GameConstant.boardSize];
+
+    public CompletedEffector[] ColEffectors { get; } =
+        new CompletedEffector[GameConstant.boardSize];
 
     public void Initialize(BoardTemplate template)
     {
         this.template = template;
         GenerateCells();
+        GenerateCompletedEffector();
+    }
+
+    private void GenerateCompletedEffector()
+    {
+        for (int i = 0; i < GameConstant.boardSize; i++)
+        {
+            CompletedEffector effector =
+                Instantiate(this.completedEffectorPrefab, transform);
+            Vector3 position = Cells[0, i].transform.position;
+            position.x = 0;
+            effector.transform.position = position;
+            effector.gameObject.SetActive(false);
+            this.RowEffectors[i] = effector;
+        }
+
+        for (int i = 0; i < GameConstant.boardSize; i++)
+        {
+            CompletedEffector effector =
+                Instantiate(this.completedEffectorPrefab, transform);
+            Vector3 position = Cells[i, 0].transform.localPosition;
+            position.y = 0;
+            effector.transform.localPosition = position;
+            effector.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
+            effector.gameObject.SetActive(false);
+            this.ColEffectors[i] = effector;
+        }
     }
 
     private void GenerateCells()
     {
         ClearBoard();
-        this.cells = new BoardCell[GameConstant.boardSize, GameConstant.boardSize];
+        this.Cells = new BoardCell[GameConstant.boardSize, GameConstant.boardSize];
         for (int i = 0; i < GameConstant.boardSize; i++)
         {
             for (int j = 0; j < GameConstant.boardSize; j++)
@@ -41,7 +76,7 @@ public class BoardGenerator : MonoBehaviour
     {
         BoardCell newCell = Instantiate(this.prefab, transform);
         newCell.gameObject.SetActive(true);
-        this.cells[x, y] = newCell;
+        this.Cells[x, y] = newCell;
         newCell.SetXY(x, y);
         SetCellPosition(x, y);
         bool isActive = this.template.shape[y * GameConstant.boardSize + x];
@@ -63,7 +98,7 @@ public class BoardGenerator : MonoBehaviour
         Vector3 position = Vector3.zero;
         position.x = CellWidth * (row - Middle) + CellWidth / 2;
         position.y = CellHeight * (column - Middle) + CellHeight / 2;
-        this.cells[row, column].RectTransform.localPosition = position;
+        this.Cells[row, column].RectTransform.localPosition = position;
     }
 
     private void ClearBoard()

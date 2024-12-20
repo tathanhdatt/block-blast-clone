@@ -1,0 +1,13 @@
+
+vignette.png
+size: 461,1325
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+vignette
+  rotate: false
+  xy: 2, 2
+  size: 457, 1321
+  orig: 513, 1383
+  offset: 28, 31
+  index: -1

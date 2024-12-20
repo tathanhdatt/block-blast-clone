@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
@@ -21,6 +22,7 @@ public class BoardCell : Cell
     [SerializeField, ReadOnly]
     private bool isOccupied;
 
+    public bool IsHovering => this.isHovering;
     public bool IsOccupied => this.isOccupied;
     public int X => this.x;
     public int Y => this.y;
@@ -33,6 +35,7 @@ public class BoardCell : Cell
 
     public void ResetToDefault()
     {
+        ResetActiveGraphicToLastSprite();
         if (this.isOccupied) return;
         this.activeGraphic.gameObject.SetActive(false);
         this.activeGraphic.color = Color.white;
@@ -71,5 +74,12 @@ public class BoardCell : Cell
             this.activeGraphic.transform.DOScale(0, 0.1f);
         tweenScale.SetEase(Ease.OutBounce);
         return tweenScale.AsyncWaitForCompletion();
+    }
+
+    private void ResetActiveGraphicToLastSprite()
+    {
+        if (this.lastActiveSprite == null) return;
+        this.graphicID = this.lastGraphicID;
+        this.activeGraphic.sprite = this.lastActiveSprite;
     }
 }
