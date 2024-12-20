@@ -37,6 +37,7 @@ public class BoardCell : Cell
     {
         ResetActiveGraphicToLastSprite();
         if (this.isOccupied) return;
+        this.activeGraphic.sprite = null;
         this.activeGraphic.gameObject.SetActive(false);
         this.activeGraphic.color = Color.white;
         this.isHovering = false;
@@ -58,6 +59,7 @@ public class BoardCell : Cell
         this.isOccupied = true;
         this.activeGraphic.gameObject.SetActive(true);
         this.activeGraphic.color = Color.white;
+        this.lastActiveSprite = null;
     }
 
     public async void Clear()
@@ -79,7 +81,8 @@ public class BoardCell : Cell
     private void ResetActiveGraphicToLastSprite()
     {
         if (this.lastActiveSprite == null) return;
-        this.graphicID = this.lastGraphicID;
-        this.activeGraphic.sprite = this.lastActiveSprite;
+        (this.graphicID, this.lastGraphicID) = (this.lastGraphicID, this.graphicID);
+        (this.activeGraphic.sprite, this.lastActiveSprite) =
+            (this.lastActiveSprite, this.activeGraphic.sprite);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
 
 public class GameOverChecker
 {
@@ -27,8 +29,8 @@ public class GameOverChecker
         {
             for (int j = 0; j < GameConstant.boardSize; j++)
             {
-                if (this.board[i, j].IsOccupied) continue;
-                if (CanPlaceBlockAt(i, j))
+                bool canPlace = CanPlaceBlockAt(i, j);
+                if (canPlace)
                 {
                     return true;
                 }
@@ -44,8 +46,9 @@ public class GameOverChecker
         {
             bool isEnoughWidth = GameConstant.boardSize - originX >= block.Width;
             bool isEnoughHeight = GameConstant.boardSize - originY >= block.Height;
-            if (!isEnoughWidth || !isEnoughHeight) return false;
+            if (!isEnoughWidth || !isEnoughHeight) continue;
             bool canPlace = true;
+            List<bool> prevs = new List<bool>();
             foreach (BlockCell cell in block.BlockCells)
             {
                 int x = cell.X + originX;

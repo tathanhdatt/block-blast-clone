@@ -68,9 +68,10 @@ public class PlaceBlockHandler : IDisposable
         {
             ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.putIn);
             PlaceBlock();
-            ClearBoardIfNeeded();
-            RemoveListenBlockEvent(block);
             this.blocks.Remove(block);
+            RemoveListenBlockEvent(block);
+            CheckRunOutOfBlocks();
+            ClearBoardIfNeeded();
             UnityEngine.Object.Destroy(block.gameObject);
             CheckGameOver?.Invoke();
         }
@@ -78,8 +79,6 @@ public class PlaceBlockHandler : IDisposable
         {
             ResetBlock(block);
         }
-
-        CheckRunOutOfBlocks();
     }
 
     private void ClearBoardIfNeeded()
@@ -160,7 +159,14 @@ public class PlaceBlockHandler : IDisposable
 
     private void PaintFullRowIfPlaced(CellGraphicID cellGraphicID)
     {
-        this.lastPaintedRows = this.board.GetCompletedRowsIfPlaced(GetHoveringRows());
+        IList<int> rows = this.board.GetCompletedRowsIfPlaced(GetHoveringRows());
+        if (rows.IsEmpty())
+        {
+            RepaintLastPaintedRows();
+            return;
+        }
+
+        this.lastPaintedRows = rows;
         foreach (int row in this.lastPaintedRows)
         {
             for (int column = 0; column < GameConstant.boardSize; column++)
@@ -172,7 +178,14 @@ public class PlaceBlockHandler : IDisposable
 
     private void PaintFullColumnIfPlaced(CellGraphicID cellGraphicID)
     {
-        this.lastPaintedColumns = this.board.GetCompletedColumnsIfPlaced(GetHoveringColumns());
+        IList<int> columns = this.board.GetCompletedColumnsIfPlaced(GetHoveringColumns());
+        if (columns.IsEmpty())
+        {
+            RepaintLastPaintedColumns();
+            return;
+        }
+
+        this.lastPaintedColumns = columns;
         foreach (int column in this.lastPaintedColumns)
         {
             for (int row = 0; row < GameConstant.boardSize; row++)
@@ -191,6 +204,9 @@ public class PlaceBlockHandler : IDisposable
                 this.board[column, row].ResetToDefault();
             }
         }
+
+        if (this.lastPaintedRows.IsEmpty()) return;
+        this.lastPaintedRows.Clear();
     }
 
     private void RepaintLastPaintedColumns()
@@ -202,5 +218,8 @@ public class PlaceBlockHandler : IDisposable
                 this.board[column, row].ResetToDefault();
             }
         }
+
+        if (this.lastPaintedColumns.IsEmpty()) return;
+        this.lastPaintedColumns.Clear();
     }
 }
