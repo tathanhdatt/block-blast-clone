@@ -206,59 +206,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &254399274
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 254399275}
-  - component: {fileID: 254399276}
-  m_Layer: 5
-  m_Name: Placeable
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &254399275
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 254399274}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1668883009}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &254399276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 254399274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a35afc88b9764919a403633f9319c511, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  templates:
-  - {fileID: 11400000, guid: c6f6df34828f27f41b28f545978bd310, type: 2}
-  - {fileID: 11400000, guid: a4b3c7f23b8548348a82f6d757259042, type: 2}
-  - {fileID: 11400000, guid: 7243eb8af8ddaba44b0787a83097f0be, type: 2}
-  usedTemplates: []
 --- !u!1 &463027639
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,51 +750,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ddbec3f1993a704b9e4fda72d35162f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &845969030
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 845969031}
-  - component: {fileID: 845969032}
-  m_Layer: 0
-  m_Name: Level Auto Play
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &845969031
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 845969030}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &845969032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 845969030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fff3189c82d4a00b15ce66691099a14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  level: {fileID: 463027644}
 --- !u!1 &903409439
 GameObject:
   m_ObjectHideFlags: 0
@@ -1828,7 +1730,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 254399275}
   - {fileID: 1734551059}
   - {fileID: 613458780}
   m_Father: {fileID: 463027643}
@@ -1850,7 +1751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 843e135c86fc4b1e87cc3527a70935c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placeableBlockTemplateProvider: {fileID: 254399276}
+  placeableBlockTemplateProvider: {fileID: 1734551060}
   randomBlockTemplateProvider: {fileID: 613458781}
 --- !u!1 &1734551058
 GameObject:
@@ -1863,7 +1764,7 @@ GameObject:
   - component: {fileID: 1734551059}
   - component: {fileID: 1734551060}
   m_Layer: 5
-  m_Name: Placeable (1)
+  m_Name: Placeable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2067,7 +1968,6 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 463027643}
   - {fileID: 1570353623}
-  - {fileID: 845969031}
   - {fileID: 1430928817}
   - {fileID: 732316006}
   - {fileID: 177972225}

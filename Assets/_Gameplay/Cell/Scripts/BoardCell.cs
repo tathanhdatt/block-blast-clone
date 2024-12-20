@@ -1,15 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Threading.Tasks;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using Dt.Attribute;
 using Dt.Extension;
+using Spine;
+using Spine.Unity;
 using UnityEngine;
 
 public class BoardCell : Cell
 {
     [Title("Board Cell")]
+    [SerializeField, Required]
+    private SkeletonGraphic skeletonGraphic;
+
+    [SerializeField]
+    private float disappearTime = 0.5f;
+
     [SerializeField, ReadOnly]
     private int x;
 
@@ -26,6 +34,21 @@ public class BoardCell : Cell
     public bool IsOccupied => this.isOccupied;
     public int X => this.x;
     public int Y => this.y;
+
+    private void OnEnable()
+    {
+        this.skeletonGraphic.AnimationState.Complete += AnimationStateOnComplete;
+    }
+
+    private void OnDisable()
+    {
+        this.skeletonGraphic.AnimationState.Complete -= AnimationStateOnComplete;
+    }
+
+    private void AnimationStateOnComplete(TrackEntry trackentry)
+    {
+        this.skeletonGraphic.gameObject.SetActive(false);
+    }
 
     public void SetXY(int x, int y)
     {
@@ -66,6 +89,7 @@ public class BoardCell : Cell
     {
         if (!this.isOccupied) return;
         this.isOccupied = false;
+        PlayClearEffect();
         await ScaleActiveImageToZero();
         ResetToDefault();
     }
@@ -73,8 +97,8 @@ public class BoardCell : Cell
     private Task ScaleActiveImageToZero()
     {
         TweenerCore<Vector3, Vector3, VectorOptions> tweenScale =
-            this.activeGraphic.transform.DOScale(0, 0.1f);
-        tweenScale.SetEase(Ease.OutBounce);
+            this.activeGraphic.transform.DOScale(0, this.disappearTime);
+        tweenScale.SetEase(Ease.OutCirc);
         return tweenScale.AsyncWaitForCompletion();
     }
 
@@ -84,5 +108,26 @@ public class BoardCell : Cell
         (this.graphicID, this.lastGraphicID) = (this.lastGraphicID, this.graphicID);
         (this.activeGraphic.sprite, this.lastActiveSprite) =
             (this.lastActiveSprite, this.activeGraphic.sprite);
+    }
+
+    private void PlayClearEffect()
+    {
+        this.skeletonGraphic.gameObject.SetActive(true);
+        this.skeletonGraphic.AnimationState.SetAnimation(0, GetAnimationName(), false);
+    }
+
+    private string GetAnimationName()
+    {
+        return this.graphicID switch
+        {
+            CellGraphicID.Blue => "cyan",
+            CellGraphicID.Cyan => "cyan",
+            CellGraphicID.Green => "green",
+            CellGraphicID.Orange => "orange",
+            CellGraphicID.Red => "orange",
+            CellGraphicID.Purple => "violet",
+            CellGraphicID.Yellow => "yellow",
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 }

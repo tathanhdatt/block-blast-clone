@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Core.AudioService;
 using Core.Service;
 
 public class BoardCleaner
 {
     private readonly BoardCell[,] board;
-    private CompletedEffector[] colEffectors;
+    private readonly CompletedEffector[] rowEffectors;
+    private readonly CompletedEffector[] colEffectors;
 
-    public BoardCleaner(BoardCell[,] board)
-        // CompletedEffector[] rowEffectors,
-        // CompletedEffector[] colEffectors)
+    public BoardCleaner(BoardCell[,] board,
+        CompletedEffector[] rowEffectors,
+        CompletedEffector[] colEffectors)
     {
         this.board = board;
-        // this.rowEffectors = rowEffectors;
-        // this.colEffectors = colEffectors;
+        this.rowEffectors = rowEffectors;
+        this.colEffectors = colEffectors;
     }
 
-    public async Task Clean(IList<int> rows = null, IList<int> cols = null)
+    public void CleanAndPlayEffect(IList<int> rows = null, IList<int> cols = null)
     {
         rows ??= IListExtension.CreateIntList(GameConstant.boardSize);
         cols ??= IListExtension.CreateIntList(GameConstant.boardSize);
@@ -30,8 +30,23 @@ public class BoardCleaner
 
         this.board.ClearRows(completedRows);
         this.board.ClearColumns(completedColumns);
-        await Task.CompletedTask;
+        PlayCleanEffectRows(completedRows);
+        PlayCleanEffectColumns(completedColumns);
     }
 
-    
+    private void PlayCleanEffectRows(IList<int> rows)
+    {
+        foreach (int row in rows)
+        {
+            this.rowEffectors[row].Play(this.board[0, row].GraphicID);
+        }
+    }
+
+    private void PlayCleanEffectColumns(IList<int> cols)
+    {
+        foreach (int col in cols)
+        {
+            this.colEffectors[col].Play(this.board[col, 0].GraphicID);
+        }
+    }
 }
