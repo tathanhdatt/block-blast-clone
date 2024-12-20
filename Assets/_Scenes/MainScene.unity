@@ -925,6 +925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   template: {fileID: 11400000, guid: 74a842a141ee8e64abc8da61f9347dc3, type: 2}
   prefab: {fileID: 2351262005758823152, guid: a72af4a194af0364484431680815c482, type: 3}
+  completedEffectorPrefab: {fileID: 7574868947337779339, guid: b16fe17fe03fec54cbf3e86c7d491930, type: 3}
 --- !u!1 &1060115762
 GameObject:
   m_ObjectHideFlags: 0

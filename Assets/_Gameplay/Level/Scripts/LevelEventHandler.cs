@@ -95,7 +95,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
             RemovePlaceBlockHandlerEvents();
         }
 
-        this.placeBlockHandler = new PlaceBlockHandler();
+        this.placeBlockHandler = new PlaceBlockHandler(this.boardGenerator.Cells);
         AddPlaceBlockHandlerEvents();
     }
 
@@ -121,9 +121,9 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         this.boardCleaner = new BoardCleaner(this.boardGenerator.Cells);
     }
 
-    private void OnClearBoardHandler(List<int> x, List<int> y)
+    private void OnClearBoardHandler(List<int> columns, List<int> rows)
     {
-        this.boardCleaner.Clean(y, x);
+        this.boardCleaner.Clean(rows, columns);
     }
 
     private void OnRunOutOfBlockHandle()

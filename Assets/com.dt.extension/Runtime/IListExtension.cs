@@ -73,4 +73,15 @@ public static class IListExtension
         list.RemoveAt(itemIndex);
         return item;
     }
+
+    public static IList<int> CreateIntList(int size)
+    {
+        IList<int> list = new List<int>();
+        for (int i = 0; i < size; i++)
+        {
+            list.Add(i);
+        }
+
+        return list;
+    }
 }

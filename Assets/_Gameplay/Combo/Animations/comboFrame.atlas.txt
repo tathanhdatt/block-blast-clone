@@ -1,0 +1,55 @@
+
+comboFrame.png
+size: 1220,193
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+block
+  rotate: false
+  xy: 1133, 42
+  size: 29, 29
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+frame1.1
+  rotate: false
+  xy: 2, 3
+  size: 434, 24
+  orig: 468, 28
+  offset: 17, 1
+  index: -1
+frame1.2
+  rotate: false
+  xy: 1172, 83
+  size: 46, 108
+  orig: 71, 136
+  offset: 8, 14
+  index: -1
+frame2.1
+  rotate: false
+  xy: 609, 73
+  size: 561, 118
+  orig: 565, 122
+  offset: 2, 2
+  index: -1
+frame2.2
+  rotate: false
+  xy: 2, 29
+  size: 605, 162
+  orig: 611, 168
+  offset: 3, 3
+  index: -1
+line1
+  rotate: false
+  xy: 438, 2
+  size: 189, 19
+  orig: 194, 22
+  offset: 3, 2
+  index: -1
+line2
+  rotate: false
+  xy: 609, 23
+  size: 522, 48
+  orig: 536, 55
+  offset: 6, 3
+  index: -1
