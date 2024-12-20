@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.AudioService;
+using Core.Service;
 
 public class PlaceBlockHandler : IDisposable
 {
@@ -43,6 +45,7 @@ public class PlaceBlockHandler : IDisposable
     {
         if (block.CanPlace())
         {
+            ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.putIn);
             PlaceBlock();
             ClearBoardIfNeeded();
             RemoveListenBlockEvent(block);

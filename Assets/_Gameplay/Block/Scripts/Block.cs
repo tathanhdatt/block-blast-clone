@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.AudioService;
+using Core.Service;
 using DG.Tweening;
 using Dt.Attribute;
 using Dt.Extension;
@@ -98,6 +100,7 @@ public class Block : MonoBehaviour,
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.takeUp);
         RectTransform.DOScale(this.dragScale, 0.1f).SetEase(Ease.OutQuad);
         RectTransform.SetSiblingIndex(this.maxSiblingIndex);
         RectTransform.localPosition += new Vector3(this.dragOffset.x, this.dragOffset.y, 0);
@@ -129,6 +132,7 @@ public class Block : MonoBehaviour,
 
     public void ResetStatus()
     {
+        ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.takeDown);
         RectTransform.DOScale(this.initialScale, 0.1f).SetEase(Ease.OutQuad);
         RectTransform.DOLocalMove(this.initialPosition, 0.1f).SetEase(Ease.OutQuad);
     }
