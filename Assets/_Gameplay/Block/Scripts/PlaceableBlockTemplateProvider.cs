@@ -40,18 +40,18 @@ public class PlaceableBlockTemplateProvider : MonoBehaviour
 
         foreach (BlockTemplate template in this.usedTemplates)
         {
-            if (!CanPlace(template)) continue;
-            return template;
+            this.templates.Add(template);
         }
 
+        this.usedTemplates.Clear();
         return null;
     }
 
     private bool CanPlace(BlockTemplate template)
     {
-        for (int i = 0; i <= GameConstant.boardSize - template.width; i++)
+        for (int j = 0; j <= GameConstant.boardSize - template.height; j++)
         {
-            for (int j = 0; j <= GameConstant.boardSize - template.height; j++)
+            for (int i = 0; i <= GameConstant.boardSize - template.width; i++)
             {
                 if (CanPlaceAt(i, j, template))
                 {
