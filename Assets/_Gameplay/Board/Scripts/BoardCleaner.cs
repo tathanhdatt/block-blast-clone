@@ -44,6 +44,7 @@ public class BoardCleaner
 
 
         bool hasCompletedLines = !completedRows.IsEmpty() || !completedColumns.IsEmpty();
+        Messenger.Broadcast(Message.hasStreak, hasCompletedLines);
         if (!hasCompletedLines) return;
         Messenger.Broadcast(Message.streak);
         if (IsEmptyBoard())
