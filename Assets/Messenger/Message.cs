@@ -7,4 +7,5 @@
     public const string scoreChanged = "Score Changed";
     public const string streak = "Streak";
     public const string hasStreak = "Has Streak";
+    public const string replay = "Replay";
 }

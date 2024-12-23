@@ -10,4 +10,9 @@ public class LevelPlayer : MonoBehaviour
     {
         this.levelEventHandler.Initialize(levelTemplate);
     }
+
+    public void Terminate()
+    {
+        this.levelEventHandler.Terminate();
+    }
 }

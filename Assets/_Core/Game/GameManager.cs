@@ -1,11 +1,13 @@
-﻿using Core.AudioService;
+﻿using System;
+using Core.AudioService;
 using Core.Service;
+using Cysharp.Threading.Tasks;
 using Dt.Attribute;
 using UnityEngine;
 
 namespace Core.Game
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, IDisposable
     {
         [SerializeField, Required]
         private GamePresenter presenter;
@@ -16,7 +18,7 @@ namespace Core.Game
         private BoardTemplateDatabase boardTemplateDatabase;
         private IAudioService audioService;
 
-        private async void Awake()
+        private void Awake()
         {
             Initialize();
         }
@@ -27,11 +29,21 @@ namespace Core.Game
             InitializeBoardDatabase();
             InitAudioService();
             Messenger.AddListener(Message.gameOver, GameOverHandler);
+            Messenger.AddListener(Message.replay, ReplayHandler);
         }
 
-        private void GameOverHandler()
+        private void ReplayHandler()
         {
+            this.presenter.GetViewPresenter<LoseViewPresenter>().Hide();
+            this.levelPlayer.Terminate();
+            PlayLevel(0);
+        }
+
+        private async void GameOverHandler()
+        {
+            await UniTask.Delay(600);
             ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.noSpace);
+            await this.presenter.GetViewPresenter<LoseViewPresenter>().Show();
         }
 
         private void InitializeBoardDatabase()
@@ -45,15 +57,18 @@ namespace Core.Game
             ServiceLocator.Register(this.audioService);
         }
 
-        private void Start()
+        private async void Start()
         {
             this.presenter.Enter(this);
-            this.presenter.InitialViewPresenters();
-            OnEnter();
+            await this.presenter.InitialViewPresenters();
+            await OnEnter();
         }
-        
-        private async void OnEnter()
+
+        private async UniTask OnEnter()
         {
+            await this.presenter.GetViewPresenter<LoadingViewPresenter>().Show();
+            await this.presenter.GetViewPresenter<LoadingViewPresenter>().Hide();
+            await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
             PlayLevel(0);
         }
 
@@ -63,8 +78,10 @@ namespace Core.Game
             this.levelPlayer.Play(levelTemplate);
         }
 
-        private void LevelWinHandler()
+        public void Dispose()
         {
+            Messenger.RemoveListener(Message.gameOver, GameOverHandler);
+            Messenger.RemoveListener(Message.replay, ReplayHandler);
         }
     }
 }

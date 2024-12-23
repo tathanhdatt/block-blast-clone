@@ -156,4 +156,18 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         this.placeBlockHandler.ClearBoard -= OnClearBoardHandler;
         this.placeBlockHandler.CheckGameOver -= OnCheckGameOverHandler;
     }
+
+    public void Terminate()
+    {
+        this.boardGenerator.Terminate();
+        this.blockSpawner.Terminate();
+        this.blocks.Clear();
+        this.isGameOver = false;
+        this.isRunOutOfBlock = false;
+        this.placeBlockHandler?.Dispose();
+        this.boardCleaner = null;
+        this.gameOverChecker = null;
+        this.streakHandler?.Dispose();
+        this.scoreHandler?.Dispose();
+    }
 }

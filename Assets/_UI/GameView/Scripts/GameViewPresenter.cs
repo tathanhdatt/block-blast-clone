@@ -6,6 +6,7 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
     private const int MaxAnim = 3;
     private GameView gameView;
     private int streakCounter;
+    private int lastHighestScore;
 
     public GameViewPresenter(GamePresenter gamePresenter, Transform transform)
         : base(gamePresenter, transform)
@@ -13,6 +14,13 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
         this.streakCounter = 1;
         Messenger.AddListener<int>(Message.scoreChanged, OnScoreChangedHandler);
         Messenger.AddListener<bool>(Message.hasStreak, StreakOnLastPlaceHandler);
+    }
+
+    protected override void OnShow()
+    {
+        base.OnShow();
+        this.lastHighestScore = PlayerPrefs.GetInt(PlayerPrefsVar.highestScore, 0);
+        this.gameView.UpdateHighestScore(this.lastHighestScore);
     }
 
     private void StreakOnLastPlaceHandler(bool hasStreak)
@@ -55,6 +63,10 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
     private void OnScoreChangedHandler(int score)
     {
         this.gameView.UpdateScore(score);
+        if (this.lastHighestScore <= score)
+        {
+            this.gameView.UpdateHighestScore(score);
+        }
     }
 
     protected override void AddViews()
