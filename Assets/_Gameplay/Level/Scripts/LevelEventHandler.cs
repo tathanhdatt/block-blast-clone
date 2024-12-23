@@ -29,6 +29,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     private PlaceBlockHandler placeBlockHandler;
     private BoardCleaner boardCleaner;
     private GameOverChecker gameOverChecker;
+    private StreakHandler streakHandler;
 
     public void Initialize(BoardTemplate levelTemplate)
     {
@@ -37,10 +38,12 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         InitializeTemplateProvider();
         InitializedBoardCleaner();
         InitializePlaceBlockHandler();
+        InitializeStreakHandler();
         SpawnBlocks(3);
         InitializeGameOverChecker();
         this.boardCleaner.CleanAndPlayEffect();
     }
+
 
     private void InitializeTemplateProvider()
     {
@@ -65,6 +68,11 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         }
     }
 
+    private void InitializeStreakHandler()
+    {
+        this.streakHandler = new StreakHandler();
+    }
+
     private void SpawnBlocks(int numberOfTemplates = 1)
     {
         if (this.isGameOver) return;
@@ -85,6 +93,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         }
         else
         {
+            Messenger.Broadcast(Message.newTurn);
             this.blocks = this.blockSpawner.Spawn(templates);
             this.placeBlockHandler.SetBlocks(this.blocks);
         }
