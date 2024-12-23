@@ -10,6 +10,7 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
     public GameViewPresenter(GamePresenter gamePresenter, Transform transform)
         : base(gamePresenter, transform)
     {
+        this.streakCounter = 1;
         Messenger.AddListener<int>(Message.scoreChanged, OnScoreChangedHandler);
         Messenger.AddListener<bool>(Message.hasStreak, StreakOnLastPlaceHandler);
     }
@@ -18,28 +19,15 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
     {
         if (hasStreak)
         {
-            this.streakCounter = Math.Clamp(this.streakCounter + 1, 1, MaxAnim);
+            this.streakCounter = Math.Clamp(this.streakCounter + 1, 2, MaxAnim);
         }
         else
         {
-            if (this.streakCounter <= 0)
-            {
-                return;
-            }
-
             PlayStreakDownAnim();
-            this.streakCounter = Math.Clamp(this.streakCounter - 1, 0, MaxAnim);
+            this.streakCounter = Math.Clamp(this.streakCounter - 1, 1, MaxAnim);
         }
 
-        if (this.streakCounter <= 0)
-        {
-            this.streakCounter = 0;
-            this.gameView.StopStreakAnim();
-        }
-        else
-        {
-            PlayStreakUpAnim();
-        }
+        PlayStreakUpAnim();
     }
 
     private async void PlayStreakUpAnim()
