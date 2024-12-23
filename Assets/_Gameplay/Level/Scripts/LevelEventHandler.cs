@@ -39,8 +39,8 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         InitializedBoardCleaner();
         InitializePlaceBlockHandler();
         InitializeStreakHandler();
-        SpawnBlocks(3);
         InitializeGameOverChecker();
+        SpawnBlocks(3);
         this.boardCleaner.CleanAndPlayEffect();
     }
 
@@ -76,27 +76,11 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     private void SpawnBlocks(int numberOfTemplates = 1)
     {
         if (this.isGameOver) return;
-        List<BlockTemplate> templates =
-            this.blockTemplateProvider
-                .GetPlaceableBlockTemplates(numberOfTemplates);
-        int numberOfRandomBlocks = GameConstant.maxBlocks - templates.Count;
-        if (numberOfRandomBlocks > 0)
-        {
-            templates.AddRange(this.blockTemplateProvider
-                .GetRandomBlockTemplates(numberOfRandomBlocks));
-        }
-
-        if (templates.IsEmpty())
-        {
-            Messenger.Broadcast(Message.gameOver);
-            this.isGameOver = true;
-        }
-        else
-        {
-            Messenger.Broadcast(Message.newTurn);
-            this.blocks = this.blockSpawner.Spawn(templates);
-            this.placeBlockHandler.SetBlocks(this.blocks);
-        }
+        List<BlockTemplate> templates = this.blockTemplateProvider.GetTemplates(numberOfTemplates);
+        Messenger.Broadcast(Message.newTurn);
+        this.blocks = this.blockSpawner.Spawn(templates);
+        this.placeBlockHandler.SetBlocks(this.blocks);
+        CheckGameOver();
     }
 
     private void InitializePlaceBlockHandler()
@@ -120,6 +104,11 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     private void OnCheckGameOverHandler()
     {
         if (this.blocks.IsEmpty()) return;
+        CheckGameOver();
+    }
+
+    private void CheckGameOver()
+    {
         this.isGameOver = this.gameOverChecker.CheckGameOver(this.blocks);
         if (this.isGameOver)
         {
@@ -139,7 +128,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     {
         this.boardCleaner.CleanAndPlayEffect(rows, columns);
         if (!this.isRunOutOfBlock) return;
-        SpawnBlocks(2);
+        SpawnBlocks(3);
         this.isRunOutOfBlock = false;
     }
 

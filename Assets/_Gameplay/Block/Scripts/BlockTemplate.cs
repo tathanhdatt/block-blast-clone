@@ -6,4 +6,5 @@ public class BlockTemplate : ScriptableObject
     public int width;
     public int height;
     public bool[] shape;
+    public BlockType type;
 }

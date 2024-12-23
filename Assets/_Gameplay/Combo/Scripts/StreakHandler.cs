@@ -28,6 +28,7 @@ public class StreakHandler : IDisposable
 
     private void BonusSoundHandler(int numberOfCompletedLines)
     {
+        if (numberOfCompletedLines < MinNumberOfCompletedLines) return;
         numberOfCompletedLines = Math.Clamp(numberOfCompletedLines,
             MinNumberOfCompletedLines, MaxNumberOfCompletedLines);
         string bonusSoundName = $"lines_{numberOfCompletedLines}";
