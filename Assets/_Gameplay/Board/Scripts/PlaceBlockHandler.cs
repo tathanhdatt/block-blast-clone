@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Core.AudioService;
 using Core.Service;
-using UnityEngine;
 
 public class PlaceBlockHandler : IDisposable
 {
@@ -45,21 +44,16 @@ public class PlaceBlockHandler : IDisposable
 
         this.boardCells = block.HitBoardCells();
 
-        if (block.CanPlace())
+        ResetLastPaintedColumns();
+        ResetLastPaintedRows();
+        if (!block.CanPlace()) return;
+        foreach (BoardCell boardCell in this.boardCells)
         {
-            foreach (BoardCell boardCell in this.boardCells)
-            {
-                boardCell.Hover(block.GraphicID);
-            }
+            boardCell.Hover(block.GraphicID);
+        }
 
-            PaintFullRowIfPlaced(block.GraphicID);
-            PaintFullColumnIfPlaced(block.GraphicID);
-        }
-        else
-        {
-            RepaintLastPaintedColumns();
-            RepaintLastPaintedRows();
-        }
+        PaintFullRowIfPlaced(block.GraphicID);
+        PaintFullColumnIfPlaced(block.GraphicID);
     }
 
     private void OnEndDragHandler(Block block)
@@ -130,6 +124,7 @@ public class PlaceBlockHandler : IDisposable
         {
             boardCell.Place();
         }
+
     }
 
     private void ResetBlock(Block block)
@@ -160,11 +155,7 @@ public class PlaceBlockHandler : IDisposable
     private void PaintFullRowIfPlaced(CellGraphicID cellGraphicID)
     {
         IList<int> rows = this.board.GetCompletedRowsIfPlaced(GetHoveringRows());
-        if (rows.IsEmpty())
-        {
-            RepaintLastPaintedRows();
-            return;
-        }
+        if (rows.IsEmpty()) return;
 
         this.lastPaintedRows = rows;
         foreach (int row in this.lastPaintedRows)
@@ -179,11 +170,7 @@ public class PlaceBlockHandler : IDisposable
     private void PaintFullColumnIfPlaced(CellGraphicID cellGraphicID)
     {
         IList<int> columns = this.board.GetCompletedColumnsIfPlaced(GetHoveringColumns());
-        if (columns.IsEmpty())
-        {
-            RepaintLastPaintedColumns();
-            return;
-        }
+        if (columns.IsEmpty()) return;
 
         this.lastPaintedColumns = columns;
         foreach (int column in this.lastPaintedColumns)
@@ -195,12 +182,13 @@ public class PlaceBlockHandler : IDisposable
         }
     }
 
-    private void RepaintLastPaintedRows()
+    private void ResetLastPaintedRows()
     {
         foreach (int row in this.lastPaintedRows)
         {
             for (int column = 0; column < GameConstant.boardSize; column++)
             {
+                if (this.boardCells.Contains(this.board[column, row])) continue;
                 this.board[column, row].ResetToDefault();
             }
         }
@@ -209,12 +197,13 @@ public class PlaceBlockHandler : IDisposable
         this.lastPaintedRows.Clear();
     }
 
-    private void RepaintLastPaintedColumns()
+    private void ResetLastPaintedColumns()
     {
         foreach (int column in this.lastPaintedColumns)
         {
             for (int row = 0; row < GameConstant.boardSize; row++)
             {
+                if (this.boardCells.Contains(this.board[column, row])) continue;
                 this.board[column, row].ResetToDefault();
             }
         }
