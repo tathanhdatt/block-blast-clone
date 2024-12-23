@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Core.Game;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class GamePresenter : MonoBehaviour
@@ -17,16 +18,20 @@ public class GamePresenter : MonoBehaviour
 
     private void AddPresenters()
     {
+        LoadingViewPresenter loadingViewPresenter = new LoadingViewPresenter(this, transform);
+        AddPresenter(loadingViewPresenter);
         GameViewPresenter gameViewPresenter = new GameViewPresenter(this, transform);
         AddPresenter(gameViewPresenter);
+        LoseViewPresenter loseViewPresenter = new LoseViewPresenter(this, transform);
+        AddPresenter(loseViewPresenter);
     }
 
-    public void InitialViewPresenters()
+    public async UniTask InitialViewPresenters()
     {
         AddPresenters();
         foreach (BaseViewPresenter presenter in this.presenters.Values)
         {
-            presenter.Initialize();
+            await presenter.Initialize();
         }
     }
 
@@ -39,5 +44,13 @@ public class GamePresenter : MonoBehaviour
     {
         Type type = typeof(T);
         return (T)this.presenters[type];
+    }
+
+    public async UniTask HideViewPresenters()
+    {
+        foreach (BaseViewPresenter viewPresenter in this.presenters.Values)
+        {
+            await viewPresenter.Hide();
+        }
     }
 }

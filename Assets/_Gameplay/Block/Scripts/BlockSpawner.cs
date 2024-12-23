@@ -35,6 +35,12 @@ public class BlockSpawner : MonoBehaviour
         return this.blockHolders;
     }
 
+    public void Terminate()
+    {
+        this.blockHolders.Clear();
+        this.currentTemplate = null;
+    }
+
     private void SpawnBlockByGivenTemplates(List<BlockTemplate> templates)
     {
         int numberOfBlocks = Mathf.Clamp(templates.Count, 0, GameConstant.maxBlocks);

@@ -1,10 +1,12 @@
 ﻿using System;
+using UnityEngine;
 
 public class ScoreHandler : IDisposable
 {
     private int streakBonus = 0;
     private int score = 0;
     private bool hasStreakAtLastTurn = false;
+    private int highestScore;
 
     public ScoreHandler()
     {
@@ -12,7 +14,17 @@ public class ScoreHandler : IDisposable
         Messenger.AddListener<int>(Message.bonus, BonusHandler);
         Messenger.AddListener(Message.newTurn, NewTurnHandler);
         Messenger.AddListener(Message.streak, StreakHandler);
+        Messenger.AddListener(Message.gameOver, GameOverHandler);
+        this.highestScore = PlayerPrefs.GetInt("highest_score", 0);
         Reset();
+    }
+
+    private void GameOverHandler()
+    {
+        if (this.score > this.highestScore)
+        {
+            PlayerPrefs.SetInt(PlayerPrefsVar.highestScore, this.score);
+        }
     }
 
     private void StreakHandler()

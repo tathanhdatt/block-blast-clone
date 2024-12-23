@@ -39,6 +39,11 @@ public class BoardGenerator : MonoBehaviour
         GenerateCompletedEffector();
     }
 
+    public void Terminate()
+    {
+        ClearBoard();
+    }
+
     private void GenerateCompletedEffector()
     {
         for (int i = 0; i < GameConstant.boardSize; i++)

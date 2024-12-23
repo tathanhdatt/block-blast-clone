@@ -16,7 +16,11 @@ public class GameView : BaseView
     [SerializeField, Required]
     private SkeletonGraphic streakScoreEffect;
 
+    [SerializeField, Required]
+    private TMP_Text highestScore;
+
     private Tweener scoreTweener;
+    private Tweener highestScoreTweener;
 
     public void UpdateScore(int score)
     {
@@ -37,8 +41,15 @@ public class GameView : BaseView
         await Task.Delay((int)(entry.AnimationEnd * 1000));
     }
 
-    public void StopStreakAnim()
+    public void UpdateHighestScore(int score)
     {
-        PlayStreakAnim("<None>");
+        this.highestScoreTweener.Kill();
+        int lastScore = int.Parse(this.scoreText.text);
+        this.highestScoreTweener = DOTween.To(val =>
+        {
+            int tempScore = Mathf.FloorToInt(val);
+            this.highestScore.SetText(tempScore.ToString());
+        }, lastScore, score, 0.2f);
+        this.highestScoreTweener.SetEase(Ease.OutQuad);
     }
 }

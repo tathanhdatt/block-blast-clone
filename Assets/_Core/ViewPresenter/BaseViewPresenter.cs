@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public abstract class BaseViewPresenter
@@ -14,12 +15,12 @@ public abstract class BaseViewPresenter
         Transform = transform;
     }
 
-    public void Initialize()
+    public async UniTask Initialize()
     {
         AddViews();
         foreach (BaseView view in this.views)
         {
-            view.Initialize();
+            await view.Initialize();
         }
     }
 
@@ -32,12 +33,12 @@ public abstract class BaseViewPresenter
         return view;
     }
 
-    public void Show()
+    public async UniTask Show()
     {
         IsShowing = true;
         foreach (BaseView view in this.views)
         {
-            view.Show();
+            await view.Show();
         }
 
         OnShow();
@@ -47,12 +48,12 @@ public abstract class BaseViewPresenter
     {
     }
 
-    public void Hide()
+    public async UniTask Hide()
     {
         IsShowing = false;
         foreach (BaseView view in this.views)
         {
-            view.Hide();
+            await view.Hide();
         }
 
         OnHide();

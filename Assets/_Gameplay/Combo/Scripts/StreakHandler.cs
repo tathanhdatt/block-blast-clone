@@ -1,6 +1,7 @@
 ﻿using System;
 using Core.AudioService;
 using Core.Service;
+using UnityEngine;
 
 public class StreakHandler : IDisposable
 {
@@ -32,6 +33,7 @@ public class StreakHandler : IDisposable
         numberOfCompletedLines = Math.Clamp(numberOfCompletedLines,
             MinNumberOfCompletedLines, MaxNumberOfCompletedLines);
         string bonusSoundName = $"lines_{numberOfCompletedLines}";
+        Debug.Log(bonusSoundName);
         ServiceLocator.GetService<IAudioService>().PlaySfx(bonusSoundName);
     }
 
