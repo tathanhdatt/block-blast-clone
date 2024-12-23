@@ -26,10 +26,6 @@ public class BoardCleaner
         cols ??= IListExtension.CreateIntList(GameConstant.boardSize);
         IList<int> completedRows = this.board.GetCompletedRows(rows);
         IList<int> completedColumns = this.board.GetCompletedColumns(cols);
-        if (!completedRows.IsEmpty() || !completedColumns.IsEmpty())
-        {
-            ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.streak1);
-        }
 
         this.board.ClearRows(completedRows);
         this.board.ClearColumns(completedColumns);
@@ -44,6 +40,20 @@ public class BoardCleaner
         {
             CellGraphicID graphicID = this.board[completedColumns[0], 0].GraphicID;
             PlayBorderEffect(graphicID);
+        }
+
+
+        bool hasCompletedLines = !completedRows.IsEmpty() || !completedColumns.IsEmpty();
+        if (!hasCompletedLines) return;
+        Messenger.Broadcast(Message.streak);
+        if (IsEmptyBoard())
+        {
+            ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.unbelievable);
+        }
+        else
+        {
+            int numberOfCompletedLines = completedRows.Count + completedColumns.Count;
+            Messenger.Broadcast(Message.bonusSound, numberOfCompletedLines);
         }
     }
 
@@ -67,5 +77,18 @@ public class BoardCleaner
         {
             this.colEffectors[col].Play(this.board[col, 0].GraphicID);
         }
+    }
+
+    private bool IsEmptyBoard()
+    {
+        foreach (BoardCell boardCell in this.board)
+        {
+            if (boardCell.IsOccupied)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
