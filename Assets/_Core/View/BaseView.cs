@@ -4,14 +4,10 @@ using UnityEngine;
 public class BaseView : MonoBehaviour
 {
     private Canvas canvas;
-    private void Awake()
-    {
-        Initialize();
-    }
 
-    protected virtual void Initialize()
+    public virtual void Initialize()
     {
-        canvas = GetComponent<Canvas>();
+        this.canvas = GetComponent<Canvas>();
     }
     public virtual void Show()
     {

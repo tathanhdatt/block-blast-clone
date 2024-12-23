@@ -15,8 +15,15 @@ public class GamePresenter : MonoBehaviour
         this.manager = gameManager;
     }
 
+    private void AddPresenters()
+    {
+        GameViewPresenter gameViewPresenter = new GameViewPresenter(this, transform);
+        AddPresenter(gameViewPresenter);
+    }
+
     public void InitialViewPresenters()
     {
+        AddPresenters();
         foreach (BaseViewPresenter presenter in this.presenters.Values)
         {
             presenter.Initialize();

@@ -13,7 +13,7 @@ public class StreakHandler : IDisposable
     public StreakHandler()
     {
         Messenger.AddListener(Message.newTurn, NewTurnHandler);
-        Messenger.AddListener<int>(Message.bonusSound, BonusSoundHandler);
+        Messenger.AddListener<int>(Message.bonus, BonusSoundHandler);
         Messenger.AddListener(Message.streak, IncreaseStreakHandler);
         this.streakNumber = 0;
         this.hasStreakAtLastTurn = false;
@@ -54,7 +54,7 @@ public class StreakHandler : IDisposable
     public void Dispose()
     {
         Messenger.RemoveListener(Message.newTurn, NewTurnHandler);
-        Messenger.RemoveListener<int>(Message.bonusSound, BonusSoundHandler);
-        Messenger.RemoveListener(Message.bonusSound, IncreaseStreakHandler);
+        Messenger.RemoveListener<int>(Message.bonus, BonusSoundHandler);
+        Messenger.RemoveListener(Message.streak, IncreaseStreakHandler);
     }
 }
