@@ -30,6 +30,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     private BoardCleaner boardCleaner;
     private GameOverChecker gameOverChecker;
     private StreakHandler streakHandler;
+    private ScoreHandler scoreHandler;
 
     public void Initialize(BoardTemplate levelTemplate)
     {
@@ -38,10 +39,16 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         InitializeTemplateProvider();
         InitializedBoardCleaner();
         InitializePlaceBlockHandler();
+        InitializeScoreHandler();
         InitializeStreakHandler();
         InitializeGameOverChecker();
         SpawnBlocks(3);
         this.boardCleaner.CleanAndPlayEffect();
+    }
+
+    private void InitializeScoreHandler()
+    {
+        this.scoreHandler = new ScoreHandler();
     }
 
 

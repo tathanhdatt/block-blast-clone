@@ -51,7 +51,7 @@ namespace Core.Game
             this.presenter.InitialViewPresenters();
             OnEnter();
         }
-
+        
         private async void OnEnter()
         {
             PlayLevel(0);

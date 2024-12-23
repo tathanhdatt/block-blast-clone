@@ -125,6 +125,7 @@ public class PlaceBlockHandler : IDisposable
             boardCell.Place();
         }
 
+        Messenger.Broadcast(Message.placeBlock, this.boardCells.Count);
     }
 
     private void ResetBlock(Block block)

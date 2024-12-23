@@ -17,6 +17,10 @@ public abstract class BaseViewPresenter
     public void Initialize()
     {
         AddViews();
+        foreach (BaseView view in this.views)
+        {
+            view.Initialize();
+        }
     }
 
     protected abstract void AddViews();

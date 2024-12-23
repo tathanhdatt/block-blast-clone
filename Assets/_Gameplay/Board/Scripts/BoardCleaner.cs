@@ -53,7 +53,7 @@ public class BoardCleaner
         else
         {
             int numberOfCompletedLines = completedRows.Count + completedColumns.Count;
-            Messenger.Broadcast(Message.bonusSound, numberOfCompletedLines);
+            Messenger.Broadcast(Message.bonus, numberOfCompletedLines);
         }
     }
 
