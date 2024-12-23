@@ -1,46 +1,105 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Dt.Attribute;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BlockTemplateProvider : MonoBehaviour
 {
-    [SerializeField, Required]
-    private PlaceableBlockTemplateProvider placeableBlockTemplateProvider;
+    private const float EasyTemplateProbability = 5f / 9;
+    private const float MediumTemplateProbability = 5f / 18;
+    private const float HardTemplateProbability = 1f / 6;
 
     [SerializeField, Required]
-    private RandomBlockTemplateProvider randomBlockTemplateProvider;
+    private List<BlockTemplate> templates;
 
-    public void SetBoard(BoardCell[,] board)
+    private readonly HashSet<BlockTemplate> spawnedTemplates = new HashSet<BlockTemplate>();
+
+    private BoardCell[,] boardCells;
+
+    public void SetBoard(BoardCell[,] boardCells)
     {
-        this.placeableBlockTemplateProvider.SetBoardCells(board);
+        this.boardCells = boardCells;
     }
 
     public void ShuffleTemplates()
     {
-        this.placeableBlockTemplateProvider.ShuffleTemplates();
+        this.templates.Shuffle();
     }
 
-    public List<BlockTemplate> GetRandomBlockTemplates(int numBlocks = 1)
+    public List<BlockTemplate> GetTemplates(int numberOfTemplates = 1)
     {
-        List<BlockTemplate> templates = new List<BlockTemplate>(GameConstant.maxBlocks);
-        for (int i = 0; i < numBlocks; i++)
+        List<BlockTemplate> blockTemplates = new List<BlockTemplate>(3);
+        this.spawnedTemplates.Clear();
+        for (int i = 0; i < numberOfTemplates; i++)
         {
-            templates.Add(this.randomBlockTemplateProvider.GetTemplate());
+            blockTemplates.Add(GetTemplate());
         }
 
-        return templates;
+        return blockTemplates;
     }
 
-    public List<BlockTemplate> GetPlaceableBlockTemplates(int numBlocks = 1)
+    public BlockTemplate GetTemplate()
     {
-        List<BlockTemplate> templates = new List<BlockTemplate>(GameConstant.maxBlocks);
-        for (int i = 0; i < numBlocks; i++)
+        ShuffleTemplates();
+        foreach (BlockTemplate template in this.templates)
         {
-            BlockTemplate template = this.placeableBlockTemplateProvider.GetTemplate();
-            if (template == null) break;
-            templates.Add(template);
+            if (this.spawnedTemplates.Contains(template)) continue;
+            if (!CanPlace(template)) continue;
+            if (Random.Range(0f, 1f) > GetProbability(template.type)) continue;
+            this.spawnedTemplates.Add(template);
+            return template;
         }
 
-        return templates;
+        return this.templates[0];
+    }
+
+    private float GetProbability(BlockType type)
+    {
+        return type switch
+        {
+            BlockType.Easy => EasyTemplateProbability,
+            BlockType.Medium => MediumTemplateProbability,
+            BlockType.Hard => HardTemplateProbability,
+            _ => throw new ArgumentOutOfRangeException(
+                $"There is no probability for block type {type}.")
+        };
+    }
+
+    private bool CanPlace(BlockTemplate template)
+    {
+        for (int j = 0; j <= GameConstant.boardSize - template.height; j++)
+        {
+            for (int i = 0; i <= GameConstant.boardSize - template.width; i++)
+            {
+                if (CanPlaceAt(i, j, template))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool CanPlaceAt(int originX, int originY, BlockTemplate template)
+    {
+        for (int i = 0; i < template.height; i++)
+        {
+            for (int j = 0; j < template.width; j++)
+            {
+                int index = i * template.width + j;
+                bool isActiveCell = template.shape[index];
+                if (!isActiveCell) continue;
+                int x = originX + j;
+                int y = originY + i;
+                if (this.boardCells[x, y].IsOccupied)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

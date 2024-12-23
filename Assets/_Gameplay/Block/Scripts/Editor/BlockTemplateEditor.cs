@@ -24,6 +24,7 @@ public class BlockTemplateEditor : Editor
         int lastWidth = Template.width;
         int lastHeight = Template.height;
         DrawSizeInput();
+        DrawType();
         CreateTemplateShapeIfChangeSize(lastWidth, lastHeight);
         GUILayout.Space(10);
         GUILayout.BeginVertical();
@@ -51,6 +52,12 @@ public class BlockTemplateEditor : Editor
                 .toggleStyle);
             GUILayout.Space(10);
         }
+    }
+
+    private void DrawType()
+    {
+        Template.type = (BlockType)EditorGUILayout.EnumPopup("Level", Template.type);
+        GUILayout.Space(10);
     }
 
     private void CreateTemplateShapeIfChangeSize(int lastWidth, int lastHeight)
