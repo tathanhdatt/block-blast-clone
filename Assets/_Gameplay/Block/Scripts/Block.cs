@@ -50,6 +50,18 @@ public class Block : MonoBehaviour,
     [SerializeField, ReadOnly]
     private List<BoardCell> hitBoardCells = new List<BoardCell>(25);
 
+    [SerializeField, ReadOnly]
+    private Vector2 lastPointerPosition;
+
+    [SerializeField, ReadOnly]
+    private float cellWidth;
+
+    [SerializeField, ReadOnly]
+    private float cellHeight;
+
+    [SerializeField, ReadOnly]
+    private bool canHit;
+
     public int Width
     {
         get => this.width;
@@ -86,11 +98,13 @@ public class Block : MonoBehaviour,
     public event Action<Block> OnDragging;
     public event Action<Block> OnEndDragging;
 
-    private void OnEnable()
+    public void Initialize(float cellWidth, float cellHeight)
     {
         RectTransform.localScale = Vector3.zero;
         RectTransform.DOScale(this.initialScale, 0.5f).SetEase(Ease.OutBack);
         this.graphicID = EnumExtension.GetRandom<CellGraphicID>();
+        this.cellWidth = cellWidth;
+        this.cellHeight = cellHeight;
     }
 
     public void AddBlockCell(BlockCell blockCell)
@@ -100,7 +114,6 @@ public class Block : MonoBehaviour,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log(name);
         ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.takeUp);
         RectTransform.DOScale(this.dragScale, 0.1f).SetEase(Ease.OutQuad);
         RectTransform.SetSiblingIndex(this.maxSiblingIndex);
@@ -110,6 +123,7 @@ public class Block : MonoBehaviour,
     public void OnBeginDrag(PointerEventData eventData)
     {
         this.isDragging = true;
+        this.lastPointerPosition = GetLocalPositionInCanvasRect(eventData.position);
         OnBeginDragging?.Invoke(this);
     }
 
@@ -117,12 +131,19 @@ public class Block : MonoBehaviour,
     {
         OnDragging?.Invoke(this);
         if (Camera.main == null) return;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            this.gameCanvas.transform as RectTransform,
-            eventData.position,
-            Camera.main,
-            out Vector2 localPosition);
+        Vector2 localPosition = GetLocalPositionInCanvasRect(eventData.position);
         RectTransform.localPosition = localPosition + this.dragOffset;
+        float diffX = Mathf.Abs(localPosition.x - this.lastPointerPosition.x);
+        float diffY = Mathf.Abs(localPosition.y - this.lastPointerPosition.y);
+        if (diffX > this.cellWidth / 2 || diffY > this.cellHeight / 2)
+        {
+            this.canHit = true;
+            this.lastPointerPosition = localPosition;
+        }
+        else
+        {
+            this.canHit = false;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -141,6 +162,7 @@ public class Block : MonoBehaviour,
 
     public List<BoardCell> HitBoardCells()
     {
+        if (!this.canHit) return this.hitBoardCells;
         this.hitBoardCells.Clear();
         foreach (BlockCell blockCell in this.blockCells)
         {
@@ -164,5 +186,15 @@ public class Block : MonoBehaviour,
     {
         if (this.isDragging) return;
         ResetStatus();
+    }
+
+    private Vector2 GetLocalPositionInCanvasRect(Vector2 screenPoint)
+    {
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            this.gameCanvas.transform as RectTransform,
+            screenPoint,
+            Camera.main,
+            out Vector2 localPosition);
+        return localPosition;
     }
 }

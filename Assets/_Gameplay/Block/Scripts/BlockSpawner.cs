@@ -75,6 +75,7 @@ public class BlockSpawner : MonoBehaviour
         block.InitialPosition = spawnPoint.localPosition;
         block.GameCanvas = this.gameCanvas;
         block.MaxSiblingIndex = this.spawnPoints.Count;
+        block.Initialize(CellWidth, CellHeight);
         return block;
     }
 
