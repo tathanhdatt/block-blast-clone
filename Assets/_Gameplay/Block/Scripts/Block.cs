@@ -100,6 +100,7 @@ public class Block : MonoBehaviour,
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        Debug.Log(name);
         ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.takeUp);
         RectTransform.DOScale(this.dragScale, 0.1f).SetEase(Ease.OutQuad);
         RectTransform.SetSiblingIndex(this.maxSiblingIndex);
