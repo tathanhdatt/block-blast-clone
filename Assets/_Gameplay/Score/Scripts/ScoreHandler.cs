@@ -1,4 +1,6 @@
 ﻿using System;
+using Core.AudioService;
+using Core.Service;
 using UnityEngine;
 
 public class ScoreHandler : IDisposable
@@ -63,6 +65,7 @@ public class ScoreHandler : IDisposable
     private void AddScore(int score)
     {
         this.score += score;
+        ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.scoreUp);
         Messenger.Broadcast(Message.scoreChanged, this.score);
     }
 

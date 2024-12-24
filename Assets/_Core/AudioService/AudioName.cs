@@ -5,4 +5,7 @@
     public const string takeUp = "takeUp";
     public const string noSpace = "noSpace";
     public const string unbelievable = "unbelievable";
+    public const string reloadLevel = "reloadMap";
+    public const string scoreUp = "scoreUp";
+    public const string buttonClick = "buttonClick";
 }
