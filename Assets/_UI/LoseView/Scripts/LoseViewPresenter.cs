@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Core.AudioService;
+using Core.Service;
+using UnityEngine;
 
 public class LoseViewPresenter : BaseViewPresenter
 {
@@ -22,6 +24,7 @@ public class LoseViewPresenter : BaseViewPresenter
 
     private void OnClickReplayHandler()
     {
+        ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.buttonClick);
         Messenger.Broadcast(Message.replay);
     }
 }

@@ -32,17 +32,20 @@ namespace Core.Game
             Messenger.AddListener(Message.replay, ReplayHandler);
         }
 
-        private void ReplayHandler()
+        private async void ReplayHandler()
         {
-            this.presenter.GetViewPresenter<LoseViewPresenter>().Hide();
+            UniTask hideLoseView = this.presenter.GetViewPresenter<LoseViewPresenter>().Hide();
+            UniTask hideGameView = this.presenter.GetViewPresenter<GameViewPresenter>().Hide();
+            await UniTask.WhenAll(hideLoseView, hideGameView);
             this.levelPlayer.Terminate();
             PlayLevel(0);
+            await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
         }
 
         private async void GameOverHandler()
         {
-            await UniTask.Delay(600);
             ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.noSpace);
+            await UniTask.Delay(1500);
             await this.presenter.GetViewPresenter<LoseViewPresenter>().Show();
         }
 
@@ -68,8 +71,8 @@ namespace Core.Game
         {
             await this.presenter.GetViewPresenter<LoadingViewPresenter>().Show();
             await this.presenter.GetViewPresenter<LoadingViewPresenter>().Hide();
-            await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
             PlayLevel(0);
+            await this.presenter.GetViewPresenter<GameViewPresenter>().Show();
         }
 
         private void PlayLevel(int level)
