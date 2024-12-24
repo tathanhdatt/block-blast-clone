@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      crown.skel_0: 5968548297105005336
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

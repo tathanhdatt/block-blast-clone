@@ -17,7 +17,7 @@ public class BoardGenerator : MonoBehaviour
 
     [SerializeField, Required]
     private CompletedEffector borderEffector;
-    
+
     public CompletedEffector BorderEffector => this.borderEffector;
 
     private float CellWidth => this.prefab.RectTransform.rect.width;
@@ -118,7 +118,10 @@ public class BoardGenerator : MonoBehaviour
         if (Cells == null) return;
         foreach (BoardCell boardCell in Cells)
         {
-            Destroy(boardCell.gameObject);
+            if (boardCell != null)
+            {
+                Destroy(boardCell.gameObject);
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.AudioService;
+using Core.Service;
 using Dt.Attribute;
 using UnityEngine;
 
@@ -44,6 +46,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
         InitializeGameOverChecker();
         SpawnBlocks(3);
         this.boardCleaner.CleanAndPlayEffect();
+        ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.reloadLevel);
     }
 
     private void InitializeScoreHandler()

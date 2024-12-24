@@ -30,14 +30,13 @@ public class BlockSpawner : MonoBehaviour
 
     public List<Block> Spawn(List<BlockTemplate> templates)
     {
-        this.blockHolders.Clear();
         SpawnBlockByGivenTemplates(templates);
         return this.blockHolders;
     }
 
     public void Terminate()
     {
-        this.blockHolders.Clear();
+        ClearBlocks();
         this.currentTemplate = null;
     }
 
@@ -122,5 +121,16 @@ public class BlockSpawner : MonoBehaviour
         cell.SetActiveGraphic(block.GraphicID);
         cell.ActiveGraphic.gameObject.SetActive(true);
         return cell;
+    }
+
+    private void ClearBlocks()
+    {
+        foreach (Block blockHolder in this.blockHolders)
+        {
+            if (blockHolder != null)
+            {
+                Destroy(blockHolder.gameObject);
+            }
+        }
     }
 }
