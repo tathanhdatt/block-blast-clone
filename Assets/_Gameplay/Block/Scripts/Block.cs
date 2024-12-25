@@ -180,7 +180,7 @@ public class Block : MonoBehaviour,
     {
         float diffX = Mathf.Abs(localPosition.x - this.lastPointerPosition.x);
         float diffY = Mathf.Abs(localPosition.y - this.lastPointerPosition.y);
-        if (diffX > this.cellWidth / 2 || diffY > this.cellHeight / 4)
+        if (diffX > this.cellWidth / 4 || diffY > this.cellHeight / 4)
         {
             this.canHit = true;
             this.lastPointerPosition = localPosition;
