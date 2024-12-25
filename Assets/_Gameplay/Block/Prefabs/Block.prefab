@@ -53,6 +53,9 @@ MonoBehaviour:
   initialScale: {x: 0.4, y: 0.4, z: 0.4}
   dragScale: {x: 1, y: 1, z: 1}
   dragOffset: {x: 0, y: 200}
+  minDragOffset: {x: 0, y: 50}
+  maxDragOffset: {x: 0, y: 400}
+  speed: {x: 10, y: 10}
   width: 0
   height: 0
   gameCanvas: {fileID: 0}
@@ -62,6 +65,11 @@ MonoBehaviour:
   isDragging: 0
   blockCells: []
   hitBoardCells: []
+  lastPointerPosition: {x: 0, y: 0}
+  cellWidth: 0
+  cellHeight: 0
+  canHit: 0
+  currentDragOffset: {x: 0, y: 0}
 --- !u!222 &2042135000623284241
 CanvasRenderer:
   m_ObjectHideFlags: 0
