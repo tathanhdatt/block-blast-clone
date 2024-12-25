@@ -1,0 +1,13 @@
+
+crown.skel.png
+size: 117,92
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bigger_crown
+  rotate: false
+  xy: 2, 2
+  size: 113, 88
+  orig: 113, 88
+  offset: 0, 0
+  index: -1

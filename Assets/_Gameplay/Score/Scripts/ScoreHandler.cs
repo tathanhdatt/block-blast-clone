@@ -1,13 +1,11 @@
 ﻿using System;
-using Core.AudioService;
-using Core.Service;
 using UnityEngine;
 
 public class ScoreHandler : IDisposable
 {
-    private int streakBonus = 0;
-    private int score = 0;
-    private bool hasStreakAtLastTurn = false;
+    private int streakBonus;
+    private int score;
+    private bool hasStreakAtLastTurn;
     private int highestScore;
 
     public ScoreHandler()
@@ -17,16 +15,28 @@ public class ScoreHandler : IDisposable
         Messenger.AddListener(Message.newTurn, NewTurnHandler);
         Messenger.AddListener(Message.streak, StreakHandler);
         Messenger.AddListener(Message.gameOver, GameOverHandler);
-        this.highestScore = PlayerPrefs.GetInt("highest_score", 0);
+        Messenger.AddListener(Message.replay, ReplayHandler);
+        this.highestScore = PlayerPrefs.GetInt(PlayerPrefsVar.highestScore, 0);
         Reset();
+    }
+
+    private void ReplayHandler()
+    {
+        this.highestScore = PlayerPrefs.GetInt(PlayerPrefsVar.highestScore, 0);
+        this.score = 0;
+        this.streakBonus = 10;
+        this.hasStreakAtLastTurn = false;
     }
 
     private void GameOverHandler()
     {
+        PlayerPrefs.SetInt(PlayerPrefsVar.score, this.score);
         if (this.score > this.highestScore)
         {
             PlayerPrefs.SetInt(PlayerPrefsVar.highestScore, this.score);
         }
+
+        PlayerPrefs.Save();
     }
 
     private void StreakHandler()
@@ -65,7 +75,6 @@ public class ScoreHandler : IDisposable
     private void AddScore(int score)
     {
         this.score += score;
-        ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.scoreUp);
         Messenger.Broadcast(Message.scoreChanged, this.score);
     }
 
@@ -75,5 +84,6 @@ public class ScoreHandler : IDisposable
         Messenger.RemoveListener<int>(Message.bonus, BonusHandler);
         Messenger.RemoveListener(Message.newTurn, NewTurnHandler);
         Messenger.RemoveListener(Message.streak, StreakHandler);
+        Messenger.RemoveListener(Message.replay, ReplayHandler);
     }
 }

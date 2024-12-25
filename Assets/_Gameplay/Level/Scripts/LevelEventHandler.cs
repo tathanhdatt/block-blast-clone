@@ -28,10 +28,12 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     [SerializeField, ReadOnly]
     private bool isRunOutOfBlock;
 
+    [SerializeField, Required]
+    private StreakHandler streakHandler;
+
     private PlaceBlockHandler placeBlockHandler;
     private BoardCleaner boardCleaner;
     private GameOverChecker gameOverChecker;
-    private StreakHandler streakHandler;
     private ScoreHandler scoreHandler;
 
     public void Initialize(BoardTemplate levelTemplate)
@@ -80,7 +82,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
 
     private void InitializeStreakHandler()
     {
-        this.streakHandler = new StreakHandler();
+        this.streakHandler.Initialize();
     }
 
     private void SpawnBlocks(int numberOfTemplates = 1)

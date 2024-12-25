@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Globalization;
+using Core.AudioService;
+using Core.Service;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Dt.Attribute;
 using Dt.Extension;
+using Spine.Unity;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +24,17 @@ public class LoseView : BaseView
     [SerializeField, Required]
     private Button replayButton;
 
+    [Title("Effect")]
+    [SerializeField, Required]
+    private SkeletonGraphic crown;
+
+    [SerializeField, Required]
+    private ParticleSystem confetti;
+
+    [Title("Score")]
+    [SerializeField, Required]
+    private TMP_Text score;
+
     public event Action OnClickReplay;
 
     public override async UniTask Initialize()
@@ -33,7 +49,6 @@ public class LoseView : BaseView
         ResetScaleButton();
         await base.Show();
         await FadeInBackground();
-        await ScaleUpButton();
     }
 
     public override async UniTask Hide()
@@ -43,7 +58,6 @@ public class LoseView : BaseView
         await FadeInFadeBackground();
         await base.Hide();
         DisableFadeBackground();
-        
     }
 
     private async UniTask FadeInBackground()
@@ -52,7 +66,7 @@ public class LoseView : BaseView
         await tweener.AsyncWaitForCompletion();
     }
 
-    private async UniTask ScaleUpButton()
+    public async UniTask ScaleUpButton()
     {
         Tweener tweener = this.replayButton.transform
             .DOScale(1, 0.4f).SetEase(Ease.OutBack);
@@ -88,5 +102,34 @@ public class LoseView : BaseView
     {
         Tweener tweener = this.fadeBackground.DOFade(1, 1).SetEase(Ease.OutQuad);
         await tweener.AsyncWaitForCompletion();
+    }
+
+    public void EnableCrown()
+    {
+        this.crown.gameObject.SetActive(true);
+        this.crown.AnimationState.SetAnimation(0, "animation", false);
+    }
+
+    public void DisableCrown()
+    {
+        this.crown.gameObject.SetActive(false);
+    }
+
+    public void PlayConfetti()
+    {
+        this.confetti.Play();
+    }
+
+    public async UniTask ShowScore(int score)
+    {
+        Tweener tweener = DOTween.To(val => SetScore((int)val),
+            0, score, 0.4f);
+        tweener.SetEase(Ease.OutQuad);
+        await tweener.AsyncWaitForCompletion();
+    }
+
+    private void SetScore(int score)
+    {
+        this.score.SetText(score.ToString());
     }
 }

@@ -89,4 +89,14 @@ public class GameView : BaseView
             .AsyncWaitForCompletion();
         this.fadeBackground.gameObject.SetActive(false);
     }
+
+    public void SetScore(int score)
+    {
+        this.scoreText.SetText(score.ToString());
+    }
+
+    public void SetHighestScore(int score)
+    {
+        this.highestScore.SetText(score.ToString());
+    }
 }
