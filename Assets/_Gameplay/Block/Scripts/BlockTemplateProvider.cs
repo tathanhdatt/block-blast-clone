@@ -6,9 +6,9 @@ using Random = UnityEngine.Random;
 
 public class BlockTemplateProvider : MonoBehaviour
 {
-    private const float EasyTemplateProbability = 5f / 9;
-    private const float MediumTemplateProbability = 5f / 18;
-    private const float HardTemplateProbability = 1f / 6;
+    private const float EasyTemplateProbability = 7f / 13;
+    private const float MediumTemplateProbability = 4f / 13;
+    private const float HardTemplateProbability = 2f / 13;
 
     [SerializeField, Required]
     private List<BlockTemplate> templates;
