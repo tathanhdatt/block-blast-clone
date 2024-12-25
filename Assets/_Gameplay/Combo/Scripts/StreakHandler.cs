@@ -1,17 +1,21 @@
 ﻿using System;
 using Core.AudioService;
 using Core.Service;
+using Dt.Attribute;
 using UnityEngine;
 
-public class StreakHandler : IDisposable
+public class StreakHandler : MonoBehaviour, IDisposable
 {
+    [SerializeField, Required]
+    private ParticleSystem bonusParticles;
+
     private const int MaxStreak = 10;
     private const int MinNumberOfCompletedLines = 2;
     private const int MaxNumberOfCompletedLines = 5;
     private int streakNumber;
     private bool hasStreakAtLastTurn;
 
-    public StreakHandler()
+    public void Initialize()
     {
         Messenger.AddListener(Message.newTurn, NewTurnHandler);
         Messenger.AddListener<int>(Message.bonus, BonusSoundHandler);
@@ -33,7 +37,7 @@ public class StreakHandler : IDisposable
         numberOfCompletedLines = Math.Clamp(numberOfCompletedLines,
             MinNumberOfCompletedLines, MaxNumberOfCompletedLines);
         string bonusSoundName = $"lines_{numberOfCompletedLines}";
-        Debug.Log(bonusSoundName);
+        this.bonusParticles.Play();
         ServiceLocator.GetService<IAudioService>().PlaySfx(bonusSoundName);
     }
 

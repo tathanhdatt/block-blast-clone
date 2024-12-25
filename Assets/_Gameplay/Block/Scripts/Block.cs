@@ -62,9 +62,6 @@ public class Block : MonoBehaviour,
     [SerializeField, ReadOnly]
     private bool canHit;
 
-    [SerializeField, ReadOnly]
-    private float offsetY;
-
     public int Width
     {
         get => this.width;
@@ -135,15 +132,15 @@ public class Block : MonoBehaviour,
         OnDragging?.Invoke(this);
         if (Camera.main == null) return;
         Vector2 localPosition = GetLocalPositionInCanvasRect(eventData.position);
-        if (Mathf.Abs(this.lastPointerPosition.y - localPosition.y) > 50)
+        if (Mathf.Abs(this.lastPointerPosition.y - localPosition.y) > this.cellHeight / 1.5f)
         {
             if (this.lastPointerPosition.y < localPosition.y)
             {
-                this.dragOffset.y += 22;
+                this.dragOffset.y += 16;
             }
             else
             {
-                this.dragOffset.y -= 20;
+                this.dragOffset.y -= 16;
             }
         }
 
@@ -155,9 +152,8 @@ public class Block : MonoBehaviour,
     {
         float diffX = Mathf.Abs(localPosition.x - this.lastPointerPosition.x);
         float diffY = Mathf.Abs(localPosition.y - this.lastPointerPosition.y);
-        if (diffX > this.cellWidth / 2 || diffY > this.cellHeight / 2)
+        if (diffX > this.cellWidth / 1.5f || diffY > this.cellHeight / 1.5f)
         {
-            this.offsetY += 10;
             this.canHit = true;
             this.lastPointerPosition = localPosition;
         }
@@ -169,7 +165,6 @@ public class Block : MonoBehaviour,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        this.offsetY = 0;
         this.isDragging = false;
         OnEndDragging?.Invoke(this);
     }

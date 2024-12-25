@@ -1,4 +1,6 @@
 ﻿using System;
+using Core.AudioService;
+using Core.Service;
 using UnityEngine;
 
 public class GameViewPresenter : BaseViewPresenter, IDisposable
@@ -7,6 +9,7 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
     private GameView gameView;
     private int streakCounter;
     private int lastHighestScore;
+    private bool isPlayedNewHighScoreSound;
 
     public GameViewPresenter(GamePresenter gamePresenter, Transform transform)
         : base(gamePresenter, transform)
@@ -14,7 +17,9 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
         this.streakCounter = 1;
         Messenger.AddListener<int>(Message.scoreChanged, OnScoreChangedHandler);
         Messenger.AddListener<bool>(Message.hasStreak, StreakOnLastPlaceHandler);
+        Messenger.AddListener(Message.replay, OnReplayHandler);
     }
+
 
     protected override void OnShow()
     {
@@ -63,10 +68,21 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
     private void OnScoreChangedHandler(int score)
     {
         this.gameView.UpdateScore(score);
-        if (this.lastHighestScore <= score)
+        if (this.lastHighestScore > score) return;
+        if (!this.isPlayedNewHighScoreSound)
         {
-            this.gameView.UpdateHighestScore(score);
+            ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.newHighScoreInGame);
+            this.isPlayedNewHighScoreSound = true;
         }
+
+        this.gameView.UpdateHighestScore(score);
+    }
+
+    private void OnReplayHandler()
+    {
+        this.isPlayedNewHighScoreSound = false;
+        this.gameView.SetScore(0);
+        this.gameView.SetHighestScore(0);
     }
 
     protected override void AddViews()
@@ -78,5 +94,6 @@ public class GameViewPresenter : BaseViewPresenter, IDisposable
     {
         Messenger.RemoveListener<int>(Message.scoreChanged, OnScoreChangedHandler);
         Messenger.RemoveListener<bool>(Message.hasStreak, StreakOnLastPlaceHandler);
+        Messenger.RemoveListener(Message.replay, OnReplayHandler);
     }
 }
