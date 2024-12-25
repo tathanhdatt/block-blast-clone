@@ -1,14 +1,21 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using Dt.Attribute;
+using TMPro;
 using UnityEngine;
 
-public class ScoreHandler : IDisposable
+public class ScoreHandler : MonoBehaviour, IDisposable
 {
+    [SerializeField, Required]
+    private TMP_Text scoreVisual;
+
     private int streakBonus;
     private int score;
     private bool hasStreakAtLastTurn;
     private int highestScore;
 
-    public ScoreHandler()
+    public void Initialize()
     {
         Messenger.AddListener<int>(Message.placeBlock, PlaceBlockHandler);
         Messenger.AddListener<int>(Message.bonus, BonusHandler);
@@ -16,16 +23,12 @@ public class ScoreHandler : IDisposable
         Messenger.AddListener(Message.streak, StreakHandler);
         Messenger.AddListener(Message.gameOver, GameOverHandler);
         Messenger.AddListener(Message.replay, ReplayHandler);
-        this.highestScore = PlayerPrefs.GetInt(PlayerPrefsVar.highestScore, 0);
-        Reset();
+        ResetStatus();
     }
 
     private void ReplayHandler()
     {
-        this.highestScore = PlayerPrefs.GetInt(PlayerPrefsVar.highestScore, 0);
-        this.score = 0;
-        this.streakBonus = 10;
-        this.hasStreakAtLastTurn = false;
+        ResetStatus();
     }
 
     private void GameOverHandler()
@@ -60,8 +63,9 @@ public class ScoreHandler : IDisposable
         AddScore(multiplier * this.streakBonus);
     }
 
-    public void Reset()
+    public void ResetStatus()
     {
+        this.highestScore = PlayerPrefs.GetInt(PlayerPrefsVar.highestScore, 0);
         this.score = 0;
         this.streakBonus = 10;
         this.hasStreakAtLastTurn = false;
@@ -76,6 +80,22 @@ public class ScoreHandler : IDisposable
     {
         this.score += score;
         Messenger.Broadcast(Message.scoreChanged, this.score);
+        ShowScore(score);
+    }
+
+    private async void ShowScore(int score)
+    {
+        this.scoreVisual.SetText($"+{score}");
+        this.scoreVisual.gameObject.SetActive(true);
+        this.scoreVisual.transform.localScale = Vector3.zero;
+        Tweener tweener = this.scoreVisual.transform.DOScale(1, 0.2f);
+        tweener.SetEase(Ease.OutBack);
+        await tweener.AsyncWaitForCompletion();
+        await UniTask.Delay(100);
+        tweener = this.scoreVisual.transform.DOScale(0, 0.1f);
+        tweener.SetEase(Ease.OutQuad);
+        await tweener.AsyncWaitForCompletion();
+        this.scoreVisual.gameObject.SetActive(false);
     }
 
     public void Dispose()

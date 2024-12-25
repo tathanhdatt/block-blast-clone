@@ -31,10 +31,12 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
     [SerializeField, Required]
     private StreakHandler streakHandler;
 
+    [SerializeField, Required]
+    private ScoreHandler scoreHandler;
+
     private PlaceBlockHandler placeBlockHandler;
     private BoardCleaner boardCleaner;
     private GameOverChecker gameOverChecker;
-    private ScoreHandler scoreHandler;
 
     public void Initialize(BoardTemplate levelTemplate)
     {
@@ -53,7 +55,7 @@ public class LevelEventHandler : MonoBehaviour, IDisposable
 
     private void InitializeScoreHandler()
     {
-        this.scoreHandler = new ScoreHandler();
+        this.scoreHandler.Initialize();
     }
 
 
