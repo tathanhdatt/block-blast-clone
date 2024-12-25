@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using CandyCoded.HapticFeedback;
 using Core.AudioService;
 using Core.Service;
-using Dt.Attribute;
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 public class StreakHandler : MonoBehaviour, IDisposable
 {
-    [SerializeField, Required]
-    private ParticleSystem bonusParticles;
+    [SerializeField]
+    private List<GameObject> streakObjects;
 
     private const int MaxStreak = 10;
     private const int MinNumberOfCompletedLines = 2;
@@ -37,8 +40,25 @@ public class StreakHandler : MonoBehaviour, IDisposable
         numberOfCompletedLines = Math.Clamp(numberOfCompletedLines,
             MinNumberOfCompletedLines, MaxNumberOfCompletedLines);
         string bonusSoundName = $"lines_{numberOfCompletedLines}";
-        this.bonusParticles.Play();
+        ShowStreak(this.streakObjects[numberOfCompletedLines - 1]);
+        Vibrate(numberOfCompletedLines);
         ServiceLocator.GetService<IAudioService>().PlaySfx(bonusSoundName);
+    }
+
+    private void Vibrate(int numberOfCompletedLines)
+    {
+        switch (numberOfCompletedLines)
+        {
+            case 2:
+                HapticFeedback.LightFeedback();
+                break;
+            case 3:
+                HapticFeedback.MediumFeedback();
+                break;
+            case > 3:
+                HapticFeedback.HeavyFeedback();
+                break;
+        }
     }
 
     private void NewTurnHandler()
@@ -55,6 +75,20 @@ public class StreakHandler : MonoBehaviour, IDisposable
     {
         string streakSoundName = $"streak_{this.streakNumber}";
         ServiceLocator.GetService<IAudioService>().PlaySfx(streakSoundName);
+    }
+
+    private async void ShowStreak(GameObject streakObject)
+    {
+        streakObject.transform.localScale = Vector3.zero;
+        streakObject.SetActive(true);
+        Tweener tweener = streakObject.transform.DOScale(Vector3.one, 0.4f);
+        tweener.SetEase(Ease.OutBack);
+        await tweener.AsyncWaitForCompletion();
+        await UniTask.Delay(200);
+        tweener = streakObject.transform.DOScale(Vector3.zero, 0.1f);
+        tweener.SetEase(Ease.OutQuad);
+        await tweener.AsyncWaitForCompletion();
+        streakObject.SetActive(false);
     }
 
     public void Dispose()
