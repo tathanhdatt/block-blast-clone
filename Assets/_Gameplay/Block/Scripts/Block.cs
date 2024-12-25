@@ -22,6 +22,15 @@ public class Block : MonoBehaviour,
     [SerializeField]
     private Vector2 dragOffset;
 
+    [SerializeField]
+    private Vector2 minDragOffset;
+
+    [SerializeField]
+    private Vector2 maxDragOffset;
+
+    [SerializeField]
+    private Vector2 speed;
+
     [Title("Read Only Attributes")]
     [SerializeField, ReadOnly]
     private int width;
@@ -61,6 +70,9 @@ public class Block : MonoBehaviour,
 
     [SerializeField, ReadOnly]
     private bool canHit;
+
+    [SerializeField, ReadOnly]
+    private Vector2 currentDragOffset;
 
     public int Width
     {
@@ -117,7 +129,9 @@ public class Block : MonoBehaviour,
         ServiceLocator.GetService<IAudioService>().PlaySfx(AudioName.takeUp);
         RectTransform.DOScale(this.dragScale, 0.1f).SetEase(Ease.OutQuad);
         RectTransform.SetSiblingIndex(this.maxSiblingIndex);
-        RectTransform.localPosition += new Vector3(this.dragOffset.x, this.dragOffset.y, 0);
+        this.currentDragOffset = this.dragOffset;
+        RectTransform.localPosition +=
+            new Vector3(this.currentDragOffset.x, this.currentDragOffset.y, 0);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -132,27 +146,41 @@ public class Block : MonoBehaviour,
         OnDragging?.Invoke(this);
         if (Camera.main == null) return;
         Vector2 localPosition = GetLocalPositionInCanvasRect(eventData.position);
-        if (Mathf.Abs(this.lastPointerPosition.y - localPosition.y) > this.cellHeight / 1.5f)
+        if (eventData.dragging)
         {
-            if (this.lastPointerPosition.y < localPosition.y)
-            {
-                this.dragOffset.y += 16;
-            }
-            else
-            {
-                this.dragOffset.y -= 16;
-            }
+            HandlePointerMoveX(localPosition);
+            HandlePointerMoveY(localPosition);
         }
 
         AllowHitIfNeeded(localPosition);
-        RectTransform.localPosition = localPosition + this.dragOffset;
+    }
+
+    private void HandlePointerMoveX(Vector2 pointerPosition)
+    {
+        Vector2 localPosition = RectTransform.localPosition;
+        localPosition.x = pointerPosition.x;
+        localPosition.x += this.currentDragOffset.x;
+        RectTransform.localPosition = localPosition;
+    }
+
+    private void HandlePointerMoveY(Vector2 pointerPosition)
+    {
+        float yDiff = pointerPosition.y - this.lastPointerPosition.y;
+        Vector2 localPosition = RectTransform.localPosition;
+        localPosition.y = pointerPosition.y;
+        this.currentDragOffset.y += this.speed.y * Time.deltaTime * yDiff;
+        this.currentDragOffset.y = Mathf.Clamp(this.currentDragOffset.y,
+            this.minDragOffset.y,
+            this.maxDragOffset.y);
+        localPosition.y += this.currentDragOffset.y;
+        RectTransform.localPosition = localPosition;
     }
 
     private void AllowHitIfNeeded(Vector2 localPosition)
     {
         float diffX = Mathf.Abs(localPosition.x - this.lastPointerPosition.x);
         float diffY = Mathf.Abs(localPosition.y - this.lastPointerPosition.y);
-        if (diffX > this.cellWidth / 1.5f || diffY > this.cellHeight / 1.5f)
+        if (diffX > this.cellWidth / 2 || diffY > this.cellHeight / 4)
         {
             this.canHit = true;
             this.lastPointerPosition = localPosition;
